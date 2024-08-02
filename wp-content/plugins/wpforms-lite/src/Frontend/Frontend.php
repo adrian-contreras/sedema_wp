@@ -2252,11 +2252,6 @@ class Frontend {
 		//else {
 			
 			if($field['type']=='html'){			
-			
-				//error_log('Frontend::render_field::code::'.$field['code']);
-				//error_log('Frontend::render_field::$form_data::'.json_encode($form_data));
-				//error_log('Frontend::render_field::label::class::'.$field['properties']['label']['class']);
-				//error_log('Frontend::render_field::label::value::'.$field['properties']['label']['value']);
 				if($field['code']=='[user_groups_feeds]'){
 					printf(
 						'<div id="wpforms-%3$s-field_%2$s-container" class="wpforms-field wpforms-field-checkbox %1$s"  data-field-id="%2$s">',
@@ -2273,41 +2268,6 @@ class Frontend {
 					printf('%1$s',$content);
 					printf('</fieldset>');
 					printf('</div>');
-					/*$content = isset( $field['code'] ) ? do_shortcode( $field['code'] ) : '';
-	    			echo '<div class="wpforms-field-html">';
-	    			echo $content;
-	    			echo '</div>';*/
-	    			//error_log('Frontend::render_field::bp_get_template_part::'.(bp_get_template_part( 'common/js-templates/activity/parts/bp-activity-media' )));
-	    			//include(bp_get_template_part( 'common/js-templates/activity/parts/bp-activity-media' ));
-
-	/*
-	<div id="whats-new-toolbar">
-
-				<div class="post-elements-buttons-item post-media media-support">
-				<a href="#" id="activity-media-button" class="toolbar-button bp-tooltip" data-bp-tooltip-pos="up-left" data-bp-tooltip="Attach photo">
-					<i class="bb-icon-l bb-icon-camera"></i>
-				</a>
-			</div>
-						<div class="post-elements-buttons-item post-media document-support">
-				<a href="#" id="activity-document-button" class="toolbar-button bp-tooltip" data-bp-tooltip-pos="up" data-bp-tooltip="Attach document">
-					<i class="bb-icon-l bb-icon-attach"></i>
-				</a>
-			</div>
-		
-		</div>
-	*/
-					/*printf('<div class="whats-new-form-footer">');
-					printf('<div id="whats-new-toolbar">');    			
-					printf('<div class="post-elements-buttons-item post-media media-support">');
-					printf('<a href="#" id="activity-media-button" class="toolbar-button bp-tooltip" data-bp-tooltip-pos="up-left" data-bp-tooltip="');printf(esc_attr_e( 'Attach photo', 'buddyboss' )); printf('">');
-					printf('<i class="bb-icon-l bb-icon-camera"></i>');
-					printf('</a>');
-					printf('</div>');
-					printf('</div>');
-					printf('</div>');	    			
-					bp_get_template_part( 'common/js-templates/activity/parts/bp-activity-media' );
-					*/
-
 	    		}
 
 			}
@@ -2315,136 +2275,23 @@ class Frontend {
 			//error_log('Frontend::render_field::code::'.$field['code']);
 			if($field['type']=='file_upload'){
 				if($field['code']=='[multiple_files]'){
-/*								
-			   	$field_id = esc_attr( $field['id'] );
-	    			$field_label = esc_html( $field['label'] );
-	    			$required = ! empty( $field['required'] ) ? '<span class="wpforms-required-label" aria-hidden="true">*</span>' : '';
-	    			//$required = '';
-	    			$accept = ! empty( $field['allowed_file_extensions'] ) ? ' accept="' . esc_attr( str_replace( ',', ',', $field['allowed_file_extensions'] ) ) . '"' : '';
-	    			$max_file_size = ! empty( $field['max_file_size'] ) ? ' data-max-file-size="' . esc_attr( $field['max_file_size'] ) . '"' : '';
-	    			$multiple = ! empty( $field['multiple'] ) ? ' multiple' : '';
 
-	    			//echo '<div id="wpforms-' . $form_data['id'] . '-field_' . $field_id . '-container" class="wpforms-field wpforms-field-file-upload wpforms-one-column' . ( ! empty( $field['required'] ) ? ' wpforms-field-required' : '' ) . '" >';
-	    			echo '<div id="wpforms-' . $form_data['id'] . '-field_' . $field_id . '-container" class="wpforms-field wpforms-field-file-upload" data-field-type="file-upload" data-field-id="' . $field_id . '">';
-	    			//echo '<label class="wpforms-field-label" for="wpforms-' . $form_data['id'] . '-field_' . $field_id . '">' . $field_label . $required . '</label>';
-	    			echo '<label class="wpforms-field-label" for="wpforms-' . $form_data['id'] . '-field_' . $field_id . '">' . $field_label . '</label>';
-	    			//echo '<input type="file" name="wpforms[fields][' . $field_id . '][]" id="wpforms-' . $form_data['id'] . '-field_' . $field_id . '" class="wpforms-file-upload"' . $accept . $max_file_size . $multiple . '>';
-	    			//echo '<input type="file" name="wpforms[fields][' . $field_id . '][]" id="wpforms-' . $form_data['id'] . '-field_' . $field_id . '" class="inputfile"' . $accept . $max_file_size . $multiple . ' data-multiple-caption="5">';
-	    			//echo '<small class="wpforms-field-description">' . esc_html( $field['description'] ) . '</small>';
-					echo '<div class="wpforms-uploader dz-clickable" data-field-id="' . $field_id . '" data-form-id="' . $form_data['id'] . '" data-input-name="wpforms_' . $form_data['id'] . '_' . $field_id . '" data-extensions="jpg,jpeg,jpe,gif,png,bmp,tiff,tif,webp,ico,heic,asf,asx,wmv,wmx,wm,avi,divx,mov,qt,mpeg,mpg,mpe,mp4,m4v,ogv,webm,mkv,3gp,3gpp,3g2,3gp2,txt,asc,c,cc,h,srt,csv,tsv,ics,rtx,css,vtt,mp3,m4a,m4b,aac,ra,ram,wav,ogg,oga,flac,mid,midi,wma,wax,mka,rtf,pdf,class,tar,zip,gz,gzip,rar,7z,psd,xcf,doc,pot,pps,ppt,wri,xla,xls,xlt,xlw,mpp,docx,docm,dotx,dotm,xlsx,xlsm,xlsb,xltx,xltm,xlam,pptx,pptm,ppsx,ppsm,potx,potm,ppam,sldx,sldm,onetoc,onetoc2,onepkg,oxps,xps,odt,odp,ods,odg,odc,odb,odf,wp,wpd,key,numbers,pages" data-max-size="134217728" data-max-file-number="5" data-post-max-size="134217728" data-max-parallel-uploads="4" data-parallel-uploads="true" data-file-chunk-size="2097152">';
-					echo '<div class="dz-message">';
-					echo '<svg viewBox="0 0 1024 1024" focusable="false" data-icon="inbox" width="50px" height="50px" fill="currentColor" aria-hidden="true">';
-					echo '<path d="M885.2 446.3l-.2-.8-112.2-285.1c-5-16.1-19.9-27.2-36.8-27.2H281.2c-17 0-32.1 11.3-36.9 27.6L139.4 443l-.3.7-.2.8c-1.3 4.9-1.7 9.9-1 14.8-.1 1.6-.2 3.2-.2 4.8V830a60.9 60.9 0 0 0 60.8 60.8h627.2c33.5 0 60.8-27.3 60.9-60.8V464.1c0-1.3 0-2.6-.1-3.7.4-4.9 0-9.6-1.3-14.1zm-295.8-43l-.3 15.7c-.8 44.9-31.8 75.1-77.1 75.1-22.1 0-41.1-7.1-54.8-20.6S436 441.2 435.6 419l-.3-15.7H229.5L309 210h399.2l81.7 193.3H589.4zm-375 76.8h157.3c24.3 57.1 76 90.8 140.4 90.8 33.7 0 65-9.4 90.3-27.2 22.2-15.6 39.5-37.4 50.7-63.6h156.5V814H214.4V480.1z"></path>';
-					echo '</svg>';
-					echo '<span class="modern-title">Click or drag files to this area to upload.</span>';
-					echo '<span class="modern-hint">You can upload up to 5 files.</span>';
+					echo '<div id="wpforms-139-field_10-container" class="wpforms-field wpforms-field-file-upload" data-field-id="10">';
+					echo '<label class="wpforms-field-label" for="wpforms-139-field_10">Cargar Archivos</label>';
+					echo '<div id="hide-139-10">';
+					echo '<input type="file" id="wpforms-139-field_10"';
+					echo 'class="wpforms-file-upload wpforms-hide"'; 
+					echo 'name="wpforms[fields][10][]"';
+					//echo 'data-rule-extension="jpg,jpeg,png,gif,pdf,doc,docx,ppt,pptx,xls,xlsx"';
+					echo 'data-rule-extension="jpg,jpeg,png,gif,mp4"';
+					echo 'data-rule-maxsize="10485760"';
+					echo 'data-rule-maxfilecount="5"';
+					//echo 'accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"';
+					echo 'accept=".jpg,.jpeg,.png,.gif,.mp4"';
+					echo 'multiple="multiple"';
+					echo 'aria-describedby="wpforms-139-field_10-description" style="display:none !important;"></div>';
+					echo '<div class="dropzone" id="dropzone-139-10"></div>';
 					echo '</div>';
-					echo '</div>';
-					echo '<input type="text" autocomplete="off" readonly="" class="dropzone-input" style="position:absolute!important;clip:rect(0,0,0,0)!important;height:1px!important;width:1px!important;border:0!important;overflow:hidden!important;padding:0!important;margin:0!important;" id="wpforms-' . $form_data['id'] . '-field_' . $field_id . '" name="wpforms_' . $form_data['id'] . '_' . $field_id . '" required="" value="">';	    			
-	    			echo '</div>';	
-*/	    				
-/*				
-<div class="wpforms-uploader dz-clickable" data-field-id="3" data-form-id="1449" data-input-name="wpforms_1449_3" data-extensions="jpg,jpeg,jpe,gif,png,bmp,tiff,tif,webp,ico,heic,asf,asx,wmv,wmx,wm,avi,divx,mov,qt,mpeg,mpg,mpe,mp4,m4v,ogv,webm,mkv,3gp,3gpp,3g2,3gp2,txt,asc,c,cc,h,srt,csv,tsv,ics,rtx,css,vtt,mp3,m4a,m4b,aac,ra,ram,wav,ogg,oga,flac,mid,midi,wma,wax,mka,rtf,pdf,class,tar,zip,gz,gzip,rar,7z,psd,xcf,doc,pot,pps,ppt,wri,xla,xls,xlt,xlw,mpp,docx,docm,dotx,dotm,xlsx,xlsm,xlsb,xltx,xltm,xlam,pptx,pptm,ppsx,ppsm,potx,potm,ppam,sldx,sldm,onetoc,onetoc2,onepkg,oxps,xps,odt,odp,ods,odg,odc,odb,odf,wp,wpd,key,numbers,pages" data-max-size="134217728" data-max-file-number="5" data-post-max-size="134217728" data-max-parallel-uploads="4" data-parallel-uploads="true" data-file-chunk-size="2097152">
-	<div class="dz-message">
-		<svg viewBox="0 0 1024 1024" focusable="false" data-icon="inbox" width="50px" height="50px" fill="currentColor" aria-hidden="true">
-			<path d="M885.2 446.3l-.2-.8-112.2-285.1c-5-16.1-19.9-27.2-36.8-27.2H281.2c-17 0-32.1 11.3-36.9 27.6L139.4 443l-.3.7-.2.8c-1.3 4.9-1.7 9.9-1 14.8-.1 1.6-.2 3.2-.2 4.8V830a60.9 60.9 0 0 0 60.8 60.8h627.2c33.5 0 60.8-27.3 60.9-60.8V464.1c0-1.3 0-2.6-.1-3.7.4-4.9 0-9.6-1.3-14.1zm-295.8-43l-.3 15.7c-.8 44.9-31.8 75.1-77.1 75.1-22.1 0-41.1-7.1-54.8-20.6S436 441.2 435.6 419l-.3-15.7H229.5L309 210h399.2l81.7 193.3H589.4zm-375 76.8h157.3c24.3 57.1 76 90.8 140.4 90.8 33.7 0 65-9.4 90.3-27.2 22.2-15.6 39.5-37.4 50.7-63.6h156.5V814H214.4V480.1z"></path>
-		</svg>
-		<span class="modern-title">Click or drag files to this area to upload.</span>
-
-					<span class="modern-hint">You can upload up to 5 files.</span>
-			</div>
-</div>
-<input type="text" autocomplete="off" readonly="" class="dropzone-input" style="position:absolute!important;clip:rect(0,0,0,0)!important;height:1px!important;width:1px!important;border:0!important;overflow:hidden!important;padding:0!important;margin:0!important;" id="wpforms-1449-field_3" name="wpforms_1449_3" required="" value="">
-*/
-
-/*
-$field_id = esc_attr( $field['id'] );
-$field_label = esc_html( $field['label'] );
-$required = ! empty( $field['required'] ) ? '<span class="wpforms-required-label" aria-hidden="true">*</span>' : '';
-$accept = ! empty( $field['allowed_file_extensions'] ) ? ' accept="' . esc_attr( str_replace( ',', ',', $field['allowed_file_extensions'] ) ) . '"' : '';
-$max_file_size = ! empty( $field['max_file_size'] ) ? ' data-max-file-size="' . esc_attr( $field['max_file_size'] ) . '"' : '';
-$multiple = ! empty( $field['multiple'] ) ? ' multiple' : '';
-
-echo '<div id="wpforms-' . $form_data['id'] . '-field_' . $field_id . '-container" class="wpforms-field wpforms-field-file-upload" data-field-type="file-upload" data-field-id="' . $field_id . '">';
-echo '<label class="wpforms-field-label" for="wpforms-' . $form_data['id'] . '-field_' . $field_id . '">' . $field_label . $required . '</label>';
-//echo '<div class="wpforms-uploader dz-clickable" data-field-id="' . $field_id . '" data-form-id="' . $form_data['id'] . '" data-input-name="wpforms_' . $form_data['id'] . '_' . $field_id . '" data-extensions="jpg,jpeg,jpe,gif,png,bmp,tiff,tif,webp,ico,heic,asf,asx,wmv,wmx,wm,avi,divx,mov,qt,mpeg,mpg,mpe,mp4,m4v,ogv,webm,mkv,3gp,3gpp,3g2,3gp2,txt,asc,c,cc,h,srt,csv,tsv,ics,rtx,css,vtt,mp3,m4a,m4b,aac,ra,ram,wav,ogg,oga,flac,mid,midi,wma,wax,mka,rtf,pdf,class,tar,zip,gz,gzip,rar,7z,psd,xcf,doc,pot,pps,ppt,wri,xla,xls,xlt,xlw,mpp,docx,docm,dotx,dotm,xlsx,xlsm,xlsb,xltx,xltm,xlam,pptx,pptm,ppsx,ppsm,potx,potm,ppam,sldx,sldm,onetoc,onetoc2,onepkg,oxps,xps,odt,odp,ods,odg,odc,odb,odf,wp,wpd,key,numbers,pages" data-max-size="134217728" data-max-file-number="5" data-post-max-size="134217728" data-max-parallel-uploads="4" data-parallel-uploads="true" data-file-chunk-size="2097152">';
-//echo '<div class="dz-message">';
-//echo '<svg viewBox="0 0 1024 1024" focusable="false" data-icon="inbox" width="50px" height="50px" fill="currentColor" aria-hidden="true">';
-//echo '<path d="M885.2 446.3l-.2-.8-112.2-285.1c-5-16.1-19.9-27.2-36.8-27.2H281.2c-17 0-32.1 11.3-36.9 27.6L139.4 443l-.3.7-.2.8c-1.3 4.9-1.7 9.9-1 14.8-.1 1.6-.2 3.2-.2 4.8V830a60.9 60.9 0 0 0 60.8 60.8h627.2c33.5 0 60.8-27.3 60.9-60.8V464.1c0-1.3 0-2.6-.1-3.7.4-4.9 0-9.6-1.3-14.1zm-295.8-43l-.3 15.7c-.8 44.9-31.8 75.1-77.1 75.1-22.1 0-41.1-7.1-54.8-20.6S436 441.2 435.6 419l-.3-15.7H229.5L309 210h399.2l81.7 193.3H589.4zm-375 76.8h157.3c24.3 57.1 76 90.8 140.4 90.8 33.7 0 65-9.4 90.3-27.2 22.2-15.6 39.5-37.4 50.7-63.6h156.5V814H214.4V480.1z"></path>';
-//echo '</svg>';
-//echo '<span class="modern-title">Click or drag files to this area to upload.</span>';
-//echo '<span class="modern-hint">You can upload up to 5 files.</span>';
-//echo '</div>';
-//echo '</div>';
-echo '<input type="file"' . $accept . $max_file_size . $multiple . ' class="wpforms-file-upload-input" id="wpforms-' . $form_data['id'] . '-field_' . $field_id . '" name="wpforms_' . $form_data['id'] . '_' . $field_id . '" />';
-echo '<input type="hidden" name="MAX_FILE_SIZE" value="' . esc_attr( $field['max_file_size'] * 1024 ) . '" />';
-echo '</div>';
-*/
-/*
-echo '<div id="wpforms-139-field_10-container" class="wpforms-field wpforms-field-file-upload" data-field-id="10">';
-echo '<label class="wpforms-field-label" for="wpforms-139-field_10">';
-echo 'Cargar Archivos <span class="wpforms-required-label">*</span>';
-echo '</label>';
-echo '<input type="file"';
-echo 'id="wpforms-139-field_10"';
-echo 'class="wpforms-file-upload wpforms-hide"'; 
-echo 'name="wpforms[fields][10][]"';
-echo 'data-rule-extension="jpg,jpeg,png,gif,pdf,doc,docx,ppt,pptx,xls,xlsx"';
-echo 'data-rule-maxsize="10485760"';
-echo 'data-rule-maxfilecount="5"';
-echo 'accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"';
-echo 'multiple="multiple"';
-echo 'aria-describedby="wpforms-139-field_10-description">';
-echo '<label for="wpforms-139-field_10" class="wpforms-field-file-upload-file">';
-echo '<span class="wpforms-field-file-upload-file-button">';
-echo 'Elegir archivos';
-echo '</span>';
-echo '<span class="wpforms-field-file-upload-file-name">';
-echo 'No se ha elegido ningún archivo';
-echo '</span>';
-echo '</label>';
-echo '<div id="wpforms-139-field_10-description" class="wpforms-field-description">';
-echo 'Tipos de archivo permitidos: jpg, jpeg, png, gif, pdf, doc, docx, ppt, pptx, xls, xlsx<br>';
-echo 'Tamaño máximo de archivo: 10 MB';
-echo '</div>';
-echo '</div>';
-echo '<div class="wpforms-error-container" role="alert" id="wpforms-139-footer-error">';
-echo '<span class="wpforms-hidden">Form error message</span>';
-echo '<div class="wpforms-error-container-post_max_size"></div>';
-echo '</div>';
-*/
-/*
-                                echo '<div class="wpforms-file-upload">';
-                                        echo '<input type="file" name="file" id="wpforms-tools-form-import" class="inputfile"';
-                                                echo 'data-multiple-caption="{count}'; 
-                                                echo esc_attr_e( 'files selected', 'wpforms-lite' );
-                                                echo '"';
-                                                echo 'accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" />';
-                                        echo '<label for="wpforms-tools-form-import">';
-                                                echo '<span class="fld"><span class="placeholder">';
-                                                echo esc_html_e( 'No file chosen', 'wpforms-lite' );
-                                                echo '</span></span>';
-                                                echo '<strong class="wpforms-btn wpforms-btn-md wpforms-btn-light-grey">';
-                                                        echo '<i class="fa fa-cloud-upload"></i>';
-                                                        echo esc_html_e( 'Choose a File', 'wpforms-lite' );
-                                                echo '</strong>';
-                                        echo '</label>';
-                                echo '</div>';
-*/
-echo '<div id="wpforms-139-field_10-container" class="wpforms-field wpforms-field-file-upload" data-field-id="10">';
-echo '<label class="wpforms-field-label" for="wpforms-139-field_10">Cargar Archivos</label>';
-echo '<div id="hide-139-10">';
-echo '<input type="file" id="wpforms-139-field_10"';
-echo 'class="wpforms-file-upload wpforms-hide"'; 
-echo 'name="wpforms[fields][10][]"';
-echo 'data-rule-extension="jpg,jpeg,png,gif,pdf,doc,docx,ppt,pptx,xls,xlsx"';
-echo 'data-rule-maxsize="10485760"';
-echo 'data-rule-maxfilecount="5"';
-echo 'accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"';
-echo 'multiple="multiple"';
-echo 'aria-describedby="wpforms-139-field_10-description" style="display:none !important;"></div>';
-echo '<div class="dropzone" id="dropzone-139-10"></div>';
-echo '</div>';
 				}
 			}
 

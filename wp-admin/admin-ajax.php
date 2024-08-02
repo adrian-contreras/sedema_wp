@@ -156,8 +156,8 @@ $core_actions_post_deprecated = array(
 );
 
 $core_actions_post = array_merge( $core_actions_post, $core_actions_post_deprecated );
-error_log("admin-ajax.php::_GET::".$_GET['action']);
-error_log("admin-ajax.php::_POST::".$_POST['action']);
+//error_log("admin-ajax.php::_GET::".$_GET['action']);
+//error_log("admin-ajax.php::_POST::".$_POST['action']);
 // Register core Ajax calls.
 if ( ! empty( $_GET['action'] ) && in_array( $_GET['action'], $core_actions_get, true ) ) {
 	add_action( 'wp_ajax_' . $_GET['action'], 'wp_ajax_' . str_replace( '-', '_', $_GET['action'] ), 1 );

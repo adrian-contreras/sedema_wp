@@ -155,23 +155,21 @@ function bb_fix_theme_option_for_custom_wp_installation( $url ) {
 add_action('wpforms_process_complete', 'custom_wpforms_process_complete', 10, 4);
 
 function custom_wpforms_process_complete($fields, $entry, $form_data, $entry_id){ 
-   // Verificar el ID del formulario para asegurarse de que solo se procese el formulario específico
-   $form_id = 139; // Reemplaza con tu ID de formulario
+    // Verificar el ID del formulario para asegurarse de que solo se procese el formulario específico
+    $form_id = 139; // Reemplaza con tu ID de formulario
    
 
-   //error_log("Contenido de \$_FILES: " . print_r($_FILES, true));
-   //error_log("Contenido de \$_POST: " . print_r($_POST, true));
-    //return;
+    error_log("Contenido de \$_FILES: " . print_r($_FILES, true));
+    //error_log("Contenido de \$_POST: " . print_r($_POST, true));
+    return;
     if ($form_data['id'] != $form_id) {
         return;
     }
 
-
-
     // Obtener los campos del formulario
     //$post_title = 'Nueva oferta' . date('Y-m-d H:i:s');
     $content = '';
-	error_log('functions.php::form_data::'.json_encode($entry));
+	//error_log('functions.php::form_data::'.json_encode($entry));
 	//error_log('functions.php::form_data::'.json_encode($entry['fields']['9']));
 	//error_log('functions.php::form_data::'.json_encode($form_data));
 	//error_log('functions.php::fields::'.json_encode($fields));
@@ -179,14 +177,6 @@ function custom_wpforms_process_complete($fields, $entry, $form_data, $entry_id)
     
     //$content .= '<table class="buddypress-wrap bp-tables-report"><tbody>';
     foreach ($fields as $field_id => $field) {
-    	/*
-        if ($field['name'] == 'Title') { // Reemplaza 'Title' con el nombre del campo
-            $post_title = sanitize_text_field($field['value']);
-        }
-        if ($field['name'] == 'Content') { // Reemplaza 'Content' con el nombre del campo
-            $post_content = wp_kses_post($field['value']);
-        }
-		*/        
 		//error_log('functions.php::fields::'.$field['name'].'::'.$field['value']);
 		//$content.=$field['name'].': '.$field['value']. "\n";
         //$content .= '<tr>';
@@ -195,11 +185,6 @@ function custom_wpforms_process_complete($fields, $entry, $form_data, $entry_id)
     }
     //$content .= '</tbody></table>';
 
-    // Crear la actividad en BuddyBoss
-    //$user_id = get_current_user_id(); // Obtener el ID del usuario actual
-    //$primary_link     = ;
-    
-	 //bp_loggedin_user_id()
     //error_log('functions.php::fields::'.get_current_user_id().' '.bp_loggedin_user_id());
     //error_log('functions.php::fields::'.bp_core_get_userlink( get_current_user_id(), false, true ));
     $places = array();
@@ -250,34 +235,6 @@ function custom_wpforms_process_complete($fields, $entry, $form_data, $entry_id)
 
         }
     }    
-	 /*
-    // Crear el post en WordPress
-    $new_post = array(
-        'post_title'    => $post_title,
-        'post_content'  => $content,
-        'post_status'   => 'publish', // O 'draft', según tus necesidades
-        'post_type'     => 'post'
-    );
-
-    // Insertar el post en la base de datos
-    $post_id = wp_insert_post($new_post);
-    if ($post_id) {
-
-        // Guardar los campos como meta datos del post
-        foreach ($fields as $id => $field) {
-            update_post_meta($post_id, 'wpforms_campo_' . $id, $field['value']);
-        }
-
-        // Opcionalmente, puedes guardar el ID del post creado en la entrada de WPForms
-        //wpforms()->entry->update($entry_id, array('post_id' => $post_id), '', '', array('cap' => false));
-
-        // Log para depuración
-        error_log('Post creado con éxito. ID: ' . $post_id);
-    } else {
-        // Log para depuración
-        error_log('Error al crear el post desde WPForms');
-    }
-    */
     
 }
 
@@ -584,7 +541,10 @@ function custom_add_offer_tab() {
         'default_subnav_slug' => 'offer', // Slug del subnav por defecto
     ));
 }
-add_action('bp_setup_nav', 'custom_add_offer_tab', 100);
+if(is_user_logged_in()){
+    add_action('bp_setup_nav', 'custom_add_offer_tab', 100);
+}
+
 
 function custom_offer_tab_screen() {
     add_action('bp_template_content', 'custom_offer_tab_content');
@@ -701,7 +661,7 @@ function hide_admin_bar() {
     //error_log("functions.php::hide_admin_bar::administrator::".current_user_can('administrator'));
     //error_log("functions.php::hide_admin_bar::is_user_logged_in::".is_user_logged_in());
     if(!is_user_logged_in() OR ( !current_user_can('administrator') AND !is_admin()) ){
-        error_log("functions.php::hide_admin_bar::is_user_logged_in::NOT::");
+        //error_log("functions.php::hide_admin_bar::is_user_logged_in::NOT::");
         //show_admin_bar(false);
         //add_filter( 'show_admin_bar', '__return_false' );
         add_filter('show_admin_bar', '__return_false');
