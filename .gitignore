@@ -1,0 +1,8 @@
+# debug file
+/wp-content/debug.log
+
+# uploads content
+/wp-content/uploads/*
+
+#
+*.*~
