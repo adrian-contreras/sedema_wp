@@ -2290,8 +2290,30 @@ class Frontend {
 					echo 'accept=".jpg,.jpeg,.png,.gif,.mp4"';
 					echo 'multiple="multiple"';
 					echo 'aria-describedby="wpforms-139-field_10-description" style="display:none !important;"></div>';
+					echo '<div id="dropzone-container">';
 					echo '<div class="dropzone" id="dropzone-139-10"></div>';
+					echo '<div id="previews" class="dropzone-previews"></div>';
 					echo '</div>';
+					echo '</div>';
+					echo '<input type="hidden" id="wpforms-139-field_thumbnails" name="wpforms[fields][thumbnails]" value="">';
+					
+					/*echo '<div id="dropzone-preview-template" style="display: none;">';
+					echo '<div class="dz-preview dz-file-preview">';
+					echo '<div class="dz-image">';
+					echo '<img data-dz-thumbnail />';
+					echo '<video class="dz-video" controls style="display: none; max-width: 100%; max-height: 100%;"></video>';
+					echo '</div>';
+					echo '<div class="dz-details">';
+					echo '<div class="dz-size"><span data-dz-size></span></div>';
+					echo '<div class="dz-filename"><span data-dz-name></span></div>';
+					echo '</div>';
+					echo '<div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>';
+					echo '<div class="dz-error-message"><span data-dz-errormessage></span></div>';
+					echo '<div class="dz-success-mark"><span>✔</span></div>';
+					echo '<div class="dz-error-mark"><span>✘</span></div>';
+					echo '</div>';
+					echo '</div>';*/
+
 				}
 			}
 

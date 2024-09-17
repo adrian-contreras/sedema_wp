@@ -14,18 +14,18 @@
 bp_nouveau_before_activity_post_form();
 
 $current_action = bp_current_action();
-error_log('post-form::current_action::'.($current_action));
+//error_log(basename(__FILE__).'::current_action::'.($current_action));
 if ( bp_is_user_activity() && ! bp_is_activity_tabs_active() && ! empty( $current_action ) ) {
 	$current_action = explode( ',', $current_action );
 }
-error_log('post-form::current_action::'.($current_action));
+//error_log(basename(__FILE__).'::current_action::'.($current_action));
 $bp_hide_class = (
 	! empty( $current_action ) &&
 	! is_array( $current_action ) &&
 	'just-me' !== $current_action &&
 	'activity' !== $current_action
 ) ? 'bp-hide is-bp-hide' : '';
-error_log('post-form::$bp_hide_class::'.($bp_hide_class));
+//error_log(basename(__FILE__).'::$bp_hide_class::'.($bp_hide_class));
 ?>
 
 <h2 class="bp-screen-reader-text"><?php esc_html_e( 'Post Update', 'buddyboss' ); ?></h2>

@@ -21,6 +21,7 @@ defined( 'ABSPATH' ) || exit;
  * @since BuddyBoss 1.7.0
  */
 function bp_video_upload() {
+	error_log(basename(__FILE__).'::bp_video_upload::'); 
 	/**
 	 * Make sure user is logged in
 	 */
@@ -36,7 +37,7 @@ function bp_video_upload() {
 	do_action( 'bb_before_video_upload_handler' );
 
 	$attachment = bp_video_upload_handler();
-
+	error_log(basename(__FILE__).'::bp_video_upload::attachment::'. json_encode($attachment)); 
 	/**
 	 * Hook after video upload.
 	 *
@@ -116,7 +117,8 @@ function bp_video_upload() {
  * @since BuddyBoss 1.7.0
  */
 function bp_video_thumbnail_upload_handler( $file_id = 'file' ) {
-
+	error_log(basename(__FILE__).'::bp_video_thumbnail_upload_handler::'); 
+	error_log(basename(__FILE__).'::bp_video_thumbnail_upload_handler::file_id::'. json_encode($file_id)); 
 	/**
 	 * Include required files
 	 */
@@ -210,6 +212,7 @@ function bp_video_thumbnail_upload_handler( $file_id = 'file' ) {
  * @since BuddyBoss 1.7.0
  */
 function bp_video_thumbnail_upload() {
+	error_log(basename(__FILE__).'::bp_video_thumbnail_upload::'); 
 	/**
 	 * Make sure user is logged in
 	 */
@@ -250,7 +253,7 @@ function bp_video_thumbnail_upload() {
  * @since BuddyBoss 1.7.0
  */
 function bp_video_allowed_mimes( $existing_mimes = array() ) {
-
+	error_log(basename(__FILE__).'::bp_video_allowed_mimes::'); 
 	if ( bp_is_active( 'media' ) ) {
 		$existing_mimes = array();
 		$all_extensions = bp_video_extensions_list();
@@ -274,7 +277,7 @@ function bp_video_allowed_mimes( $existing_mimes = array() ) {
  * @since BuddyBoss 1.7.0
  */
 function bp_video_upload_handler( $file_id = 'file' ) {
-
+	error_log(basename(__FILE__).'::bp_video_upload_handler::'); 
 	/**
 	 * Include required files
 	 */
@@ -350,7 +353,7 @@ function bp_video_upload_handler( $file_id = 'file' ) {
  * @since BuddyBoss 1.7.0
  */
 function bp_video_compress_image( $source, $destination, $quality = 90 ) {
-
+	error_log(basename(__FILE__).'::bp_video_compress_image::'); 
 	$info = @getimagesize( $source ); // phpcs:ignore
 
 	if ( 'image/jpeg' === $info['mime'] ) {
@@ -595,7 +598,7 @@ function bp_video_get_specific( $args = '' ) {
  * @since BuddyBoss 1.7.0
  */
 function bp_video_add( $args = '' ) {
-
+	error_log(basename(__FILE__).'::bp_video_add::'); 	
 	$r = bp_parse_args(
 		$args,
 		array(
@@ -686,6 +689,10 @@ function bp_video_add( $args = '' ) {
  * @since BuddyBoss 1.7.0
  */
 function bp_video_add_handler( $videos = array(), $privacy = 'public', $content = '', $group_id = false, $album_id = false ) {
+
+	//error_log(basename(__FILE__).'::bp_video_add_handler::');
+	//error_log(basename(__FILE__).'::bp_video_add_handler::videos::'.json_encode($videos));
+
 	global $bp_video_upload_count, $bp_video_upload_activity_content;
 	$video_ids = array();
 
@@ -772,7 +779,7 @@ function bp_video_add_handler( $videos = array(), $privacy = 'public', $content 
  * @since BuddyBoss 1.7.0
  */
 function bp_video_preview_image_by_js( $video ) {
-
+	error_log(basename(__FILE__).'::bp_video_preview_image_by_js::$video::'.json_encode($video));
 	/**
 	 * Hook before video js preview image.
 	 *
@@ -808,6 +815,8 @@ function bp_video_preview_image_by_js( $video ) {
 
 	$thumbnail = bp_video_base64_to_jpeg( $video['js_preview'], $thumbnail );
 
+	error_log(basename(__FILE__).'::bp_video_preview_image_by_js::$thumbnail::'.json_encode($thumbnail));
+
 	if ( file_exists( $thumbnail ) ) {
 		$upload_file = wp_upload_bits( $file_name, null, file_get_contents( $thumbnail ) ); // phpcs:ignore
 		if ( ! $upload_file['error'] ) {
@@ -820,6 +829,7 @@ function bp_video_preview_image_by_js( $video ) {
 			);
 
 			$preview_attachment_id = wp_insert_attachment( $attachment, $upload_file['file'] );
+			error_log(basename(__FILE__).'::bp_video_preview_image_by_js::$preview_attachment_id::'.json_encode($preview_attachment_id));
 			if ( ! is_wp_error( $preview_attachment_id ) ) {
 				if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
 					require_once ABSPATH . 'wp-admin/includes/image.php';
@@ -870,7 +880,7 @@ function bp_video_preview_image_by_js( $video ) {
  * @since BuddyBoss 1.7.0
  */
 function bp_video_add_generate_thumb_background_process( $video_id ) {
-
+	error_log(basename(__FILE__).'::bp_video_add_generate_thumb_background_process::'); 
 	if ( class_exists( 'FFMpeg\FFMpeg' ) ) {
 		global $bb_background_updater;
 		$ffmpeg = bb_video_check_is_ffmpeg_binary();
@@ -944,6 +954,7 @@ function bp_video_add_generate_thumb_background_process( $video_id ) {
  * @since BuddyBoss 1.7.0
  */
 function bp_video_base64_to_jpeg( $base64_string, $output_file ) {
+	error_log(basename(__FILE__).'::bp_video_base64_to_jpeg::'); 
 	// open the output file for writing.
 	$ifp = fopen( $output_file, 'wb' ); // phpcs:ignore
 
@@ -967,6 +978,7 @@ function bp_video_base64_to_jpeg( $base64_string, $output_file ) {
  * @param BP_Video $video data of video.
  */
 function bp_video_background_create_thumbnail( $video ) {
+	error_log(basename(__FILE__).'::bp_video_background_create_thumbnail::'); 
 
 	$error = '';
 	global $bp_background_updater;

@@ -1,0 +1,93 @@
+/*.main-envelope{
+    color:blue !important;
+}*/
+.main-envelope{
+    font-size: 13px !important;
+    color: var(--bb-alternate-text-color) !important;
+}
+
+.main-envelope::before{
+    font-size: 18px !important;
+    color: var(--bb-primary-color) !important;
+    /*margin-bottom:5px !important;*/
+    margin-right:10px !important;    
+}
+
+/*.main-button{
+    margin-bottom:5px !important;
+    margin-right:15px !important;
+}*/
+
+#previews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Espacio entre las previsualizaciones */
+    overflow-x: auto; /* Permite desplazamiento horizontal si hay muchas previsualizaciones */
+    padding: 10px;
+}
+
+#previews .dz-preview {
+    flex: 0 0 auto; /* Evita que los elementos se estiren */
+    width: 120px; /* Ancho fijo para cada previsualización */
+    margin: 0 !important; /* Anula los márgenes predeterminados de Dropzone */
+}
+
+/* Asegúrate de que las imágenes y videos se ajusten correctamente */
+#previews .dz-preview .dz-image {
+    width: 120px;
+    height: 120px;
+}
+
+#previews .dz-preview .dz-image img,
+#previews .dz-preview .dz-image video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Mantiene la relación de aspecto y cubre el área */
+}
+
+#dropzone-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+#dropzone-139-10 {
+    flex: 0 0 auto;
+    width: 300px; /* O el ancho que prefieras */
+}
+
+#previews {
+    flex: 1;
+    min-width: 0; /* Permite que el contenedor se encoja si es necesario */
+}
+
+#previews .dz-preview .dz-success-mark,
+#previews .dz-preview .dz-error-mark {
+    display: none !important;
+}
+
+.site-header .site-title {
+    display: flex;
+    align-items: center;
+}
+
+.header-home-button {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 5px 10px;
+    color: #000 !important;
+    text-decoration: none;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1;
+}
+
+.header-home-button:hover {
+    color: var(--bb-headings-color) !important;
+    text-decoration: none;
+}
+
+.block-field{
+    display: block !important;
+    background-color: #ddd !important;
+}
