@@ -195,6 +195,7 @@ function custom_wpforms_validation($fields, $entry, $form_data) {
 add_action('wpforms_process_complete', 'custom_wpforms_process_complete', 10, 4);
 
 function custom_wpforms_process_complete($fields, $entry, $form_data, $entry_id){ 
+    //error_log(basename(__FILE__));    
     // Verificar el ID del formulario para asegurarse de que solo se procese el formulario específico
     $form_id = 139; // Reemplaza con tu ID de formulario
     $file_upload_field_id = 10;
@@ -208,21 +209,11 @@ function custom_wpforms_process_complete($fields, $entry, $form_data, $entry_id)
     $_files_ = $_FILES['wpforms']['name']['fields'][$file_upload_field_id];
     if (is_array($_files_)) {
         foreach ($_files_ as $_key_ => $_filename_) {
-            //error_log("_filename_: " . ($_filename_));
-            //error_log("_key_: " . ($_key_));
-            //error_log("empty: " . empty($_filename_));
-            //error_log("strlen: " . strlen($_filename_));
             if(strlen($_filename_)>0){
                 $count_files ++;
             }
         }
     }
-    //error_log("count_files: " . $count_files);
-
-    //return;
-    /*foreach ($files as $key) {
-    }
-    return;*/
     
     $field_value = xprofile_get_field_data( $field_id_, get_current_user_id() );
 
@@ -245,12 +236,11 @@ function custom_wpforms_process_complete($fields, $entry, $form_data, $entry_id)
     }
 
     $activity_ids=add_activities($places,$content);
-    //return;
+    
     if(isset($activity_ids)){
         if(is_array($activity_ids) AND count($activity_ids)>0){
             $_ALL_FILES = array();
-            //error_log(basename(__FILE__).'::custom_wpforms_process_complete::count(activity_ids):: '.count($activity_ids).' :: $activity_ids ::'.json_encode($activity_ids));
-            
+                        
             if(count($activity_ids)>1){
                 for ($x = 0; $x <count($activity_ids)-1; $x++) {
                     array_push($_ALL_FILES, clone_files_array($_FILES));
@@ -264,8 +254,7 @@ function custom_wpforms_process_complete($fields, $entry, $form_data, $entry_id)
             foreach($activity_ids as $activity_id){
                 //$attachment_ids=add_attachment($_FILES,$activity_id);
                 $attachment_ids=add_attachment(array_pop($_ALL_FILES),$activity_id);
-                //error_log(basename(__FILE__).'::custom_wpforms_process_complete::$attachment_ids:: '.json_encode($attachment_ids));
-                
+                                
                 if(isset($attachment_ids)){
                     if(is_array($attachment_ids) AND count($attachment_ids)>0){
                         $media_ids = array();
@@ -316,7 +305,6 @@ function add_activities($_places,$_content){
     //$component='activity';
     $component=buddypress()->activity->id;
     $privacy='public';
-    //error_log(basename(__FILE__).'::add_activities::_places'.json_encode($_places));
     foreach($_places as $place_id){
         if($place_id!=0){
             //$component='groups';
@@ -346,8 +334,7 @@ function add_activities($_places,$_content){
         $activity_id = bp_activity_add( $activity_args );
         
         if ($activity_id) {
-            //error_log('functions.php::add_activities::activity_id:: ' . $activity_id);
-            
+          
             //=============DUPLICA REGISTROS=============
             //bp_activity_add_meta( $activity_id, '_link_embed', '0' );
             //bp_activity_add_meta( $activity_id, '_link_preview_data', '' );
@@ -565,8 +552,6 @@ function add_activities_attachment_meta($_activity_id,$_attachment_id, $_privacy
     }
     
     if ( ! empty( $media_id )  ) {
-        //error_log(basename(__FILE__).'::add_activities_attachment_meta::$media_id::'.$media_id);
-
 
         if (str_starts_with($_file['type'], 'image')) {
             update_post_meta( $_attachment_id, 'bp_media_id', $media_id );
@@ -614,8 +599,6 @@ function add_activities_attachment_meta($_activity_id,$_attachment_id, $_privacy
             $preview_image=bp_video_preview_image_by_js($_media );
             //$preview_image=bp_video_preview_image_by_js($media_id);
             $generate_thumb=bp_video_add_generate_thumb_background_process( $media_id );
-            //error_log(basename(__FILE__).'::add_activities_attachment_meta::$preview_image::'.$preview_image);
-            //error_log(basename(__FILE__).'::add_activities_attachment_meta::$generate_thumb::'.$generate_thumb);
         }
 
     }
@@ -666,22 +649,6 @@ function custom_offer_tab_content() {
         echo '<p>Página no encontrada.</p>';
     }
 }
-
-/*
-
-function custom_redirect_to_activity() {
-    // Asegurarse de que estamos en el perfil de un usuario
-    if (bp_is_user() && !bp_is_user_activity()) {
-        // Obtener la URL del perfil del usuario
-        $activity_link = bp_loggedin_user_domain() . BP_ACTIVITY_SLUG . '/';
-		  error_log('custom_redirect_to_activity: ' . $post_id);
-        // Redirigir a la página de actividades
-        wp_redirect($activity_link);
-        exit();
-    }
-}
-add_action('bp_template_redirect', 'custom_redirect_to_activity');
-*/
 
 // Función para recuperar los grupos del usuario autenticado
 function custom_user_groups_shortcode() {
@@ -760,12 +727,7 @@ add_action('after_setup_theme', 'hide_admin_bar');
 function hide_admin_bar() {
     //show_admin_bar(false);
     //add_filter( 'show_admin_bar', '__return_false' );
-    //error_log("functions.php::hide_admin_bar::is_admin::".is_admin());
-    //error_log("functions.php::hide_admin_bar::manage_options::".current_user_can('manage_options'));
-    //error_log("functions.php::hide_admin_bar::administrator::".current_user_can('administrator'));
-    //error_log("functions.php::hide_admin_bar::is_user_logged_in::".is_user_logged_in());
     if(!is_user_logged_in() OR ( !current_user_can('administrator') AND !is_admin()) ){
-        //error_log("functions.php::hide_admin_bar::is_user_logged_in::NOT::");
         //show_admin_bar(false);
         //add_filter( 'show_admin_bar', '__return_false' );
         add_filter('show_admin_bar', '__return_false');
@@ -783,69 +745,6 @@ function hide_admin_bar() {
         show_admin_bar(false);
     }*/
 }
-
-
-/*function add_private_message_button_to_activity( $content ) {
-    // Obtener el ID del autor de la actividad
-    $author_id = bp_get_activity_user_id();
-
-    // Obtener el enlace a la página de mensajes privados para el usuario
-    $message_link = bp_core_get_user_domain( $author_id ) . bp_get_messages_slug() . '/compose/?r=' . bp_core_get_username( $author_id );
-
-    // HTML del botón personalizado
-    $button_html = '<a href="' . esc_url( $message_link ) . '" class="button send-private-message">Enviar Mensaje Privado</a>';
-
-    // Añadir el botón al contenido de la actividad
-    $content .= '<div class="activity-send-message">' . $button_html . '</div>';
-
-    return $content;
-}
-// Hook para añadir el botón al contenido de la actividad
-add_filter( 'bp_activity_entry_content', 'add_private_message_button_to_activity' );
-*/
-/*
-function add_private_message_button_to_activity_actions() {
-    // Obtener el ID del autor de la actividad
-    $author_id = bp_get_activity_user_id();
-
-    // Obtener el enlace a la página de mensajes privados para el usuario
-    $message_link = bp_core_get_user_domain( $author_id ) . bp_get_messages_slug() . '/compose/?r=' . bp_core_get_username( $author_id );
-
-    // HTML del botón personalizado
-    $button_html = '<a href="' . esc_url( $message_link ) . '" class="button activity-button send-private-message" title="Enviar Mensaje Privado">';
-    $button_html .= '<i class="bb-icon bb-icon-message"></i>'; // Ícono de mensaje (puedes personalizar el icono)
-    $button_html .= '</a>';
-
-    // Mostrar el botón junto a los botones de Like y Comment
-    echo '<div class="activity-button-wrap">' . $button_html . '</div>';
-}
-// Hook para añadir el botón en la barra de acciones de la actividad
-add_action( 'bp_activity_entry_meta', 'add_private_message_button_to_activity_actions' );
-*/
-
-/* si muestra boton
-function add_private_message_button() {
-    if ( ! function_exists( 'bp_is_active' ) || ! bp_is_active( 'messages' ) ) {
-        return;
-    }
-
-    $current_user_id = get_current_user_id();
-    $author_id = bp_get_activity_user_id();
-
-    // No mostrar el botón si el usuario actual es el autor
-    if ( $current_user_id == $author_id ) {
-        return;
-    }
-
-    // Usar bp_core_get_user_domain en lugar de bp_get_messages_compose_url
-    $author_profile_url = bp_core_get_user_domain( $author_id );
-    $message_link = $author_profile_url . bp_get_messages_slug() . '/compose/';
-
-    echo '<a href="' . esc_url( $message_link ) . '" class="button bp-primary-action private-message-button" title="' . esc_attr__( 'Send Private Message', 'your-text-domain' ) . '">';
-    echo '<span class="bp-screen-reader-text">' . esc_html__( 'Send Private Message', 'your-text-domain' ) . '</span>';
-    echo '<span class="dashicons dashicons-email-alt"></span>';
-    echo '</a>';
-}*/
 
 function add_private_message_button() {
     if ( ! function_exists( 'bp_is_active' ) || ! bp_is_active( 'messages' ) ) {
@@ -927,51 +826,6 @@ function check_if_url_ends_with($_segment) {
     return false;
 }
 
-
-/*
-function display_page_info() {
-    if ( is_page() ) { // Asegúrate de que sea una página
-        $page_id = get_the_ID();
-        $page_title = get_the_title();
-        error_log( '<!-- ID de la página: ' . $page_id . ' | Título de la página: ' . $page_title . ' -->');
-    }
-}
-add_action( 'wp_head', 'display_page_info' );
-*/
-
-/*
-function custom_content_before_activity() {
-    // Tu contenido personalizado aquí
-    echo '<div class="my-custom-message">';
-    echo '<p>Contenido personalizado antes de las publicaciones.</p>';
-    echo '</div>';
-}
-// Enganchar el contenido antes de cada entrada de actividad
-add_action( 'bp_before_activity_entry', 'custom_content_before_activity' );
-*/
-/*
-function custom_content_before_feed() {
-    // Tu contenido personalizado aquí
-    echo '<div class="my-custom-message">';
-    echo '<p>Este es un mensaje personalizado antes de que se muestren todas las publicaciones del feed.</p>';
-    echo '</div>';
-}
-// Enganchar el contenido antes de que se muestre el feed completo
-add_action( 'bp_before_directory_activity_content', 'custom_content_before_feed' );
-*/
-/*
-function custom_content_before_activity_title() {
-    // Este contenido se insertará antes del título de la página de actividades
-    //echo '<div class="custom-content-before-title">';
-    //echo '<p>.</p>';
-    //echo '</div>';
-    echo '<header class="entry-header"><h1 class="entry-title">Plataforma de empresas circulares</h1></header>';
-
-}
-add_action( 'bp_before_directory_activity_title', 'custom_content_before_activity_title' );
-*/
-
-
 function custom_content_before_news_feed_title() {
     // Contenido personalizado que se insertará antes del título "News Feed"
     echo '<header class="entry-header"><h1 class="entry-title">Plataforma de empresas circulares</h1></header>';
@@ -1007,25 +861,6 @@ function custom_content_before_news_feed_title() {
 if(!is_user_logged_in()){
     add_action( 'bp_before_directory_activity_content', 'custom_content_before_news_feed_title' );
 }
-/*
-function my_custom_content_before_activity_feed() {
-    // Este contenido se insertará antes de que se liste el feed de actividades
-    echo '<div class="custom-content-before-feed">';
-    echo '<p>Contenido personalizado antes de que se muestre el feed de actividades.</p>';
-    echo '</div>';
-}
-add_action( 'bp_before_activity_loop', 'my_custom_content_before_activity_feed' )
-*/
-
-/*function custom_home_button_in_header() {
-    // URL a la página de actividades (News Feed)
-    $activity_url = bp_get_root_domain() ;
-    
-    // HTML del botón de Inicio
-    echo '<a href="' . esc_url( $activity_url ) . '" class="header-home-button">';
-    echo 'Inicio';
-    echo '</a>';
-}*/
 
 function add_home_button_script() {
     //$home_url = home_url('/');
@@ -1047,393 +882,6 @@ function add_home_button_script() {
 }
 add_action( 'buddyboss_theme_header', 'add_home_button_script', 20 );
 
-//add_action( 'buddyboss_theme_header', 'custom_home_button_in_header', 20 );
-//add_action( 'buddyboss_theme_header_logo_before', 'custom_home_button_in_header', 20 );
-//add_action( 'buddyboss_theme_header_logo_after', 'custom_home_button_in_header', 20 );
-//add_action( 'buddyboss_theme_before_header', 'custom_home_button_in_header', 20 );
-//add_action( 'buddyboss_theme_after_header', 'custom_home_button_in_header', 20 );
-/*
-function custom_signup_form_order( $fields ) {
-    error_log(basename(__FILE__).'::custom_signup_form_order::$fields:: '.json_encode($fields));
-    error_log("===================================================");
-
-    $profile_fields = bp_xprofile_get_groups(
-        array(
-        'fetch_fields' => true,
-        'fetch_field_data' => false,
-        )
-    );
-
-    $new_fields = array();
-
-    // Orden deseado de los campos personalizados
-    $custom_field_order = array(
-        'Nombre de la empresa',
-        'Sector empresarial',
-        'Breve descripción de la empresa',
-        'Tipo de productos que podría ofrecer en venta, donación o préstamo',
-        'Experiencias previas en economía circular e intercambio de bienes',
-        'Nombre completo del representante de la empresa que realiza el registro',
-        'Apellidos',
-        'Alias'
-    );
-
-
-    // Añadir campos personalizados en el orden especificado
-    foreach ($custom_field_order as $field_name) {
-        foreach ($profile_fields as $group) {
-            foreach ($group->fields as $field) {
-                if ($field->name === $field_name) {
-                    $new_fields['field_' . $field->id] = array(
-                        'label' => $field->name,
-                        'type' => $field->type,
-                        'required' => $field->is_required,
-                    );
-
-                    // Si es el campo "Sector empresarial", añadir las opciones
-                    if ($field_name === 'Sector empresarial') {
-                        $new_fields['field_' . $field->id]['options'] = array(
-                            'Agricultura' => 'Agricultura',
-                            'Alimentario' => 'Alimentario',
-                            'Automotriz' => 'Automotriz',
-                            'Otro' => 'Otro'
-                        );
-                    }
-
-                    break 2;
-                }
-            }
-        }
-    }
-
-    
-    // Añadir los campos de cuenta en el orden deseado
-    $account_fields_order = array(
-        'signup_email',
-        'signup_email_confirm',
-        'signup_password',
-        'signup_password_confirm'
-    );
-
-    foreach ($account_fields_order as $field) {
-        if (isset($fields['account_details'][$field])) {
-            $new_fields[$field] = $fields['account_details'][$field];
-        }
-    }
-
-    // Añadir cualquier otro campo de perfil extendido que no hayamos incluido aún
-    foreach ($profile_fields as $group) {
-        foreach ($group->fields as $field) {
-            if (!in_array($field->name, $custom_field_order)) {
-                $new_fields['field_' . $field->id] = array(
-                    'label' => $field->name,
-                    'type' => $field->type,
-                    'required' => $field->is_required,
-                );
-            }
-        }
-    }
-
-    // Reemplazar los campos originales con nuestro nuevo orden
-    $fields['account_details'] = $new_fields;
-
-    return $fields;
-}
-
-add_filter( 'bp_nouveau_get_signup_fields', 'custom_signup_form_order' );
-*/
-
-/*function custom_signup_fields($fields) {
-    error_log(print_r($fields, true));
-    // Orden deseado de los campos
-    $field_order = array(
-        'Nombre de la empresa',
-        'Sector empresarial',
-        'Breve descripción de la empresa',
-        'Tipo de productos que podría ofrecer en venta, donación o préstamo',
-        'Experiencias previas en economía circular e intercambio de bienes',
-        'Nombre completo del representante de la empresa que realiza el registro',
-        'Apellidos',
-        'Alias',
-        'signup_email',
-        'signup_email_confirm',
-        'signup_password',
-        'signup_password_confirm'
-    );
-
-    $new_fields = array();
-
-    // Primero, reorganizamos los campos de perfil extendido
-    if (isset($fields['xprofile'])) {
-        foreach ($field_order as $field_name) {
-            foreach ($fields['xprofile']['fields'] as $field_id => $field) {
-                if ($field['name'] === $field_name) {
-                    $new_fields[$field_id] = $field;
-                    // Si es el campo "Sector empresarial", asegurarnos de que sea un selectbox
-                    if ($field_name === 'Sector empresarial' && $field['type'] !== 'selectbox') {
-                        $new_fields[$field_id]['type'] = 'selectbox';
-                        $new_fields[$field_id]['options'] = array(
-                            'Agricultura' => 'Agricultura',
-                            'Alimentario' => 'Alimentario',
-                            'Automotriz' => 'Automotriz',
-                            'Otro' => 'Otro'
-                        );
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    // Luego, añadimos los campos de cuenta
-    foreach ($field_order as $field_name) {
-        if (isset($fields['account_details'][$field_name])) {
-            $new_fields[$field_name] = $fields['account_details'][$field_name];
-        }
-    }
-
-    // Añadimos cualquier otro campo que no hayamos incluido aún
-    foreach ($fields['xprofile']['fields'] as $field_id => $field) {
-        if (!isset($new_fields[$field_id])) {
-            $new_fields[$field_id] = $field;
-        }
-    }
-    foreach ($fields['account_details'] as $field_name => $field) {
-        if (!isset($new_fields[$field_name])) {
-            $new_fields[$field_name] = $field;
-        }
-    }
-
-    // Reemplazamos los campos originales con nuestro nuevo orden
-    $fields['account_details'] = $new_fields;
-    unset($fields['xprofile']); // Eliminamos la sección xprofile original
-    error_log(print_r($fields, true));
-
-    return $fields;
-}
-add_filter('bp_nouveau_get_signup_fields', 'custom_signup_fields', 20);
-*/
-/*
-function custom_signup_fields($fields) {
-    // Obtener los campos de perfil extendido
-    $profile_groups = bp_xprofile_get_groups(array(
-        'fetch_fields' => true
-    ));
-
-    $new_fields = array();
-
-    // Orden deseado de los campos
-    $field_order = array(
-        'Nombre de la empresa',
-        'Sector empresarial',
-        'Breve descripción de la empresa',
-        'Tipo de productos que podría ofrecer en venta, donación o préstamo',
-        'Experiencias previas en economía circular e intercambio de bienes',
-        'Nombre completo del representante de la empresa que realiza el registro',
-        'Apellidos',
-        'Alias',
-        'signup_email',
-        'signup_email_confirm',
-        'signup_password',
-        'signup_password_confirm'
-    );
-
-    // Primero, añadimos los campos en el orden deseado
-    foreach ($field_order as $field_name) {
-        if (isset($fields['account_details'][$field_name])) {
-            // Este es un campo de cuenta existente
-            $new_fields[$field_name] = $fields['account_details'][$field_name];
-        } else {
-            // Buscamos este campo en los campos de perfil extendido
-            foreach ($profile_groups as $group) {
-                foreach ($group->fields as $field) {
-                    if ($field->name === $field_name) {
-                        $new_fields['field_' . $field->id] = array(
-                            'label' => $field->name,
-                            'type' => $field->type,
-                            'required' => $field->is_required,
-                        );
-
-                        // Si es el campo "Sector empresarial", añadimos las opciones
-                        if ($field_name === 'Sector empresarial') {
-                            $new_fields['field_' . $field->id]['type'] = 'selectbox';
-                            $new_fields['field_' . $field->id]['options'] = array(
-                                'Agricultura' => 'Agricultura',
-                                'Alimentario' => 'Alimentario',
-                                'Automotriz' => 'Automotriz',
-                                'Otro' => 'Otro'
-                            );
-                        }
-                        break 2;
-                    }
-                }
-            }
-        }
-    }
-
-    // Añadimos cualquier otro campo de cuenta que no hayamos incluido aún
-    foreach ($fields['account_details'] as $field_name => $field) {
-        if (!isset($new_fields[$field_name])) {
-            $new_fields[$field_name] = $field;
-        }
-    }
-
-    // Añadimos cualquier otro campo de perfil extendido que no hayamos incluido aún
-    foreach ($profile_groups as $group) {
-        foreach ($group->fields as $field) {
-            if (!isset($new_fields['field_' . $field->id])) {
-                $new_fields['field_' . $field->id] = array(
-                    'label' => $field->name,
-                    'type' => $field->type,
-                    'required' => $field->is_required,
-                );
-            }
-        }
-    }
-
-    // Reemplazamos los campos originales con nuestro nuevo orden
-    $fields['account_details'] = $new_fields;
-
-    return $fields;
-}
-add_filter('bp_nouveau_get_signup_fields', 'custom_signup_fields', 20);
-
-function custom_signup_field_order($field_order) {
-    $new_order = array(
-        'Nombre de la empresa',
-        'Sector empresarial',
-        'Descripción',
-        'account_details'  // Esto incluye email y contraseña
-    );
-    
-    // Añadir cualquier otro campo que no esté en nuestro orden personalizado
-    foreach ($field_order as $field) {
-        if (!in_array($field, $new_order)) {
-            $new_order[] = $field;
-        }
-    }
-    
-    return $new_order;
-}
-add_filter('bp_signup_field_order', 'custom_signup_field_order');
-
-function custom_signup_fields_order($content) {
-    if (!is_page('register')) {
-        return $content;
-    }
-    error_log('content::'.$content);
-
-    $dom = new DOMDocument();
-    @$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
-    $xpath = new DOMXPath($dom);
-
-    $form = $xpath->query('//form[@id="signup-form"]')->item(0);
-    if (!$form) {
-        return $content;
-    }
-
-    $fields_order = array(
-        'Nombre de la empresa',
-        'Sector empresarial',
-        'Breve descripción de la empresa',
-        'Tipo de productos que podría ofrecer en venta, donación o préstamo',
-        'Experiencias previas en economía circular e intercambio de bienes',
-        'Nombre completo del representante de la empresa que realiza el registro',
-        'Apellidos',
-        'Alias',
-        'signup_email',
-        'signup_email_confirm',
-        'signup_password',
-        'signup_password_confirm'
-    );
-
-    $temp_parent = $dom->createElement('div');
-
-    foreach ($fields_order as $field_name) {
-        $field = null;
-        if (in_array($field_name, array('signup_email', 'signup_email_confirm', 'signup_password', 'signup_password_confirm'))) {
-            $field = $xpath->query('//div[contains(@class, "' . $field_name . '")]', $form)->item(0);
-        } else {
-            $field = $xpath->query('//div[contains(@class, "editfield")][./label[contains(text(), "' . $field_name . '")]]', $form)->item(0);
-        }
-        error_log(($field));
-
-        if ($field) {
-            $temp_parent->appendChild($field->cloneNode(true));
-        }
-    }
-
-    // Mover los campos restantes al final
-    $remaining_fields = $xpath->query('//div[contains(@class, "editfield")]', $form);
-    foreach ($remaining_fields as $field) {
-        if (!$temp_parent->querySelector('div[contains(@class, "' . $field->getAttribute('class') . '")]')) {
-            $temp_parent->appendChild($field->cloneNode(true));
-        }
-    }
-
-    // Limpiar el formulario y añadir los campos en el nuevo orden
-    while ($form->firstChild) {
-        $form->removeChild($form->firstChild);
-    }
-    while ($temp_parent->firstChild) {
-        $form->appendChild($temp_parent->firstChild);
-    }
-
-    return $dom->saveHTML();
-}
-
-add_filter('the_content', 'custom_signup_fields_order');
-
-//funcionando
-function custom_signup_fields_order() {
-    ?>
-    <script type="text/javascript" id="order-js-extra">
-    jQuery(document).ready(function($) {
-        var form = $('#signup-form');
-        var fieldsOrder = [        
-            'Nombre de la empresa',
-            'Sector empresarial',
-            'Breve descripción de la empresa',
-            'Tipo de productos que podría ofrecer en venta, donación o préstamo',
-            'Experiencias previas en economía circular e intercambio de bienes',
-            'Nombre completo del representante de la empresa que realiza el registro',
-            'Apellidos',
-            'Alias',
-            'signup_email',
-            'signup_email_confirm',
-            'signup_password',
-            'signup_password_confirm',
-            'submit'
-        ];
-        
-        fieldsOrder.forEach(function(fieldName) {
-            var field;
-            if (['signup_email', 'signup_email_confirm', 'signup_password', 'signup_password_confirm','submit'].includes(fieldName)) {
-                field = form.find('div.' + fieldName);
-            } else {
-                field = form.find('div.editfield:has(label:contains("' + fieldName + '"))');
-            }
-            if (field.length) {
-                form.append(field);
-            }
-        });
-    });
-    </script>
-    <?php
-}
-add_action('bp_before_register_page', 'custom_signup_fields_order');
-function custom_signup_fields_order() {
-    ob_start();
-    ?>
-    <script type="text/javascript" id="order-js-extra">
-
-    </script>
-    <?php
-    $script = ob_get_clean();
-    echo $script;
-}
-add_action('wp_head', 'custom_signup_fields_order');
-*/
 function add_alias_field() {
     ?>
     <div class="editfield">
@@ -1449,13 +897,12 @@ function check_alias_uniqueness() {
     $base_alias = sanitize_user($_POST['alias']);
     $alias = $base_alias;
     $counter = 1;
-    //error_log(basename(__FILE__).'::check_alias_uniqueness::$alias::(before)::'.$alias);
+  
     while (username_exists($alias)) {
         $alias = $base_alias . $counter;
         $counter++;
     }
-    //error_log(basename(__FILE__).'::check_alias_uniqueness::$alias::(after)::'.$alias);
-
+    
     wp_send_json_success(array('alias' => $alias));
 }
 add_action('wp_ajax_check_alias_uniqueness', 'check_alias_uniqueness');
