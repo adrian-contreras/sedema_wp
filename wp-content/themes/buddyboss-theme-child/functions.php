@@ -614,7 +614,7 @@ function search_by_filename($data_array, $search_filename) {
     return null; // Retorna null si no se encuentra
 }
 
-
+/*
 function custom_add_offer_tab() {
     global $bp;
 
@@ -628,9 +628,21 @@ function custom_add_offer_tab() {
         'default_subnav_slug' => 'offer', // Slug del subnav por defecto
     ));
 }
+
 if(is_user_logged_in()){
     add_action('bp_setup_nav', 'custom_add_offer_tab', 100);
+}*/
+
+function ocultar_barra_navegacion_buddyboss() {
+    ?>
+    <style type="text/css">       
+        .actvity-head-bar, .main-navs, .bp-navs.bp-subnavs {
+            display: none !important;
+        }
+    </style>
+    <?php
 }
+add_action('wp_head', 'ocultar_barra_navegacion_buddyboss');
 
 
 function custom_offer_tab_screen() {
@@ -784,8 +796,25 @@ function add_private_message_button() {
 function add_private_message_button_to_activity() {
     add_action( 'bp_activity_entry_meta', 'add_private_message_button', 20 );
 }
+
+function custom_news_feed_title() {
+    ?>
+    <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var entryTitle = document.querySelector('.entry-title');
+        //console.log(logoContainer);
+        if(entryTitle){
+            if(entryTitle.innerText==='News Feed')entryTitle.innerText='Muro General';
+        }
+    });
+    </script>
+    <?php   
+}
+
 if(is_user_logged_in()){
     add_action( 'bp_init', 'add_private_message_button_to_activity' );
+
+    add_action( 'wp_head', 'custom_news_feed_title' );
 }
 
 function custom_styles_and_scripts() {
