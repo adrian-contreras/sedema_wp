@@ -1854,7 +1854,8 @@ function bp_get_group_creator_avatar( $group = false, $args = array() ) {
 			'height' => false,
 			'class'  => 'avatar',
 			'id'     => false,
-			'alt'    => sprintf( __( 'Group organizer profile photo of %s', 'buddyboss' ), bp_core_get_user_displayname( $group->creator_id ) ),
+			//'alt'    => sprintf( __( 'Group organizer profile photo of %s', 'buddyboss' ), bp_core_get_user_displayname( $group->creator_id ) ),
+			'alt'    => sprintf( __( 'Group organizer profile photo of %s', 'buddyboss' ), xprofile_get_field_data( FIELD_NAME_COMPANY, $group->creator_id ) ),
 		),
 		'group_creator_avatar'
 	);
@@ -1937,7 +1938,7 @@ function bp_group_list_admins( $group = false ) {
 				}
 				?>
 				<li>
-					<a href="<?php echo esc_url( bp_core_get_user_domain( $admin->user_id, $admin->user_nicename, $admin->user_login ) ); ?>" class="bp-tooltip" data-bp-tooltip-pos="up" data-bp-tooltip="<?php echo esc_attr( bp_core_get_user_displayname( $admin->user_id ) ); ?>">
+					<a href="<?php echo esc_url( bp_core_get_user_domain( $admin->user_id, $admin->user_nicename, $admin->user_login ) ); ?>" class="bp-tooltip" data-bp-tooltip-pos="up" data-bp-tooltip="<?php /*echo esc_attr( bp_core_get_user_displayname( $admin->user_id ) );*/ echo esc_attr( xprofile_get_field_data( FIELD_NAME_COMPANY, $admin->user_id ) );?>">
 					<?php
 					echo bp_core_fetch_avatar(
 						array(
@@ -1948,7 +1949,8 @@ function bp_group_list_admins( $group = false ) {
 									'Profile photo of %s',
 									'buddyboss'
 								),
-								bp_core_get_user_displayname( $admin->user_id )
+								//bp_core_get_user_displayname( $admin->user_id )
+								xprofile_get_field_data( FIELD_NAME_COMPANY, $admin->user_id )
 							),
 						)
 					);
@@ -2047,7 +2049,7 @@ function bp_group_list_mods( $group = false ) {
 			<?php foreach ( (array) $group->mods as $mod ) { ?>
 
 				<li>
-					<a href="<?php echo bp_core_get_user_domain( $mod->user_id, $mod->user_nicename, $mod->user_login ); ?>" class="bp-tooltip" data-bp-tooltip-pos="up" data-bp-tooltip="<?php printf( ( '%s' ), bp_core_get_user_displayname( $mod->user_id ) ); ?>">
+					<a href="<?php echo bp_core_get_user_domain( $mod->user_id, $mod->user_nicename, $mod->user_login ); ?>" class="bp-tooltip" data-bp-tooltip-pos="up" data-bp-tooltip="<?php /*printf( ( '%s' ), bp_core_get_user_displayname( $mod->user_id ) );*/ printf( ( '%s' ), xprofile_get_field_data( FIELD_NAME_COMPANY, $mod->user_id ) );?>">
 						<?php
 						echo bp_core_fetch_avatar(
 							array(
@@ -2058,7 +2060,8 @@ function bp_group_list_mods( $group = false ) {
 										'Profile photo of %s',
 										'buddyboss'
 									),
-									bp_core_get_user_displayname( $mod->user_id )
+									//bp_core_get_user_displayname( $mod->user_id )
+									xprofile_get_field_data( FIELD_NAME_COMPANY, $mod->user_id )
 								),
 							)
 						);
@@ -3226,7 +3229,9 @@ function bp_group_admin_memberlist( $admin_list = false, $group = false ) {
 								'Profile photo of %s',
 								'buddyboss'
 							),
-							bp_core_get_user_displayname( $admin->user_id )
+							//bp_core_get_user_displayname( $admin->user_id )
+							xprofile_get_field_data( FIELD_NAME_COMPANY, $admin->user_id )
+
 						),
 					)
 				);
@@ -3256,7 +3261,8 @@ function bp_group_admin_memberlist( $admin_list = false, $group = false ) {
 								'Profile photo of %s',
 								'buddyboss'
 							),
-							bp_core_get_user_displayname( $admin->user_id )
+							//bp_core_get_user_displayname( $admin->user_id )
+							xprofile_get_field_data( FIELD_NAME_COMPANY, $admin->user_id )
 						),
 					)
 				);
@@ -3340,7 +3346,8 @@ function bp_group_mod_memberlist( $admin_list = false, $group = false ) {
 								'Profile photo of %s',
 								'buddyboss'
 							),
-							bp_core_get_user_displayname( $mod->user_id )
+							//bp_core_get_user_displayname( $mod->user_id )
+							xprofile_get_field_data( FIELD_NAME_COMPANY,  $mod->user_id )
 						),
 					)
 				);
@@ -3370,7 +3377,8 @@ function bp_group_mod_memberlist( $admin_list = false, $group = false ) {
 								'Profile photo of %s',
 								'buddyboss'
 							),
-							bp_core_get_user_displayname( $mod->user_id )
+							//bp_core_get_user_displayname( $mod->user_id )
+							xprofile_get_field_data( FIELD_NAME_COMPANY, $mod->user_id )
 						),
 					)
 				);
@@ -5091,7 +5099,7 @@ function bp_get_group_member_link() {
 	 *
 	 * @param string $value HTML link for the current user.
 	 */
-	return apply_filters( 'bp_get_group_member_link', '<a href="' . bp_core_get_user_domain( $members_template->member->user_id, $members_template->member->user_nicename, $members_template->member->user_login ) . '">' . bp_core_get_user_displayname( $members_template->member->user_id ) . '</a>' );
+	return apply_filters( 'bp_get_group_member_link', '<a href="' . bp_core_get_user_domain( $members_template->member->user_id, $members_template->member->user_nicename, $members_template->member->user_login ) . '">' . /*bp_core_get_user_displayname( $members_template->member->user_id )*/ xprofile_get_field_data( FIELD_NAME_COMPANY, $members_template->member->user_id ) . '</a>' );
 }
 
 /**
@@ -6826,7 +6834,8 @@ function bp_group_request_user_avatar_thumb() {
 						'Profile photo of %s',
 						'buddyboss'
 					),
-					bp_core_get_user_displayname( $requests_template->request->user_id )
+					//bp_core_get_user_displayname( $requests_template->request->user_id )
+					xprofile_get_field_data( FIELD_NAME_COMPANY, $requests_template->request->user_id )
 				),
 			)
 		)

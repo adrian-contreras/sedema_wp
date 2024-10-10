@@ -116,7 +116,8 @@ function bp_nouveau_activity_localize_scripts( $params = array() ) {
 			) ),
 			'avatar_width'      => $width,
 			'avatar_height'     => $height,
-			'user_display_name' => bp_core_get_user_displayname( bp_loggedin_user_id() ),
+			//'user_display_name' => bp_core_get_user_displayname( bp_loggedin_user_id() ),
+			'user_display_name' => xprofile_get_field_data( FIELD_NAME_COMPANY, bp_loggedin_user_id() ),
 			'user_domain'       => bp_loggedin_user_domain(),
 			'avatar_alt'        => sprintf(
 			/* translators: %s = member name */
@@ -228,7 +229,8 @@ function bp_nouveau_activity_localize_scripts( $params = array() ) {
 	}
 
 	$activity_strings = array(
-		'whatsnewPlaceholder' => sprintf( __( 'Share what\'s on your mind, %s...', 'buddyboss' ), bp_core_get_user_displayname( bp_loggedin_user_id() ) ),
+		//'whatsnewPlaceholder' => sprintf( __( 'Share what\'s on your mind, %s...', 'buddyboss' ), bp_core_get_user_displayname( bp_loggedin_user_id() ) ),
+		'whatsnewPlaceholder' => sprintf( __( 'Share what\'s on your mind, %s...', 'buddyboss' ), xprofile_get_field_data( FIELD_NAME_COMPANY, bp_loggedin_user_id() ) ),
 		'whatsnewLabel'       => esc_html__( 'Post what\'s new', 'buddyboss' ),
 		'whatsnewpostinLabel' => esc_html__( 'Post in', 'buddyboss' ),
 		'postUpdateButton'    => esc_html__( 'Post', 'buddyboss' ),

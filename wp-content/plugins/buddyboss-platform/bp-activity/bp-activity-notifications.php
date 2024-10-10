@@ -28,7 +28,8 @@ function bp_activity_format_notifications( $action, $item_id, $secondary_item_id
 	$return        = false;
 	$activity_id   = $item_id;
 	$user_id       = $secondary_item_id;
-	$user_fullname = bp_core_get_user_displayname( $user_id );
+	//$user_fullname = bp_core_get_user_displayname( $user_id );
+	$user_fullname = xprofile_get_field_data( FIELD_NAME_COMPANY, $user_id );
 	$amount        = '';
 	$text          = '';
 	$link          = '';

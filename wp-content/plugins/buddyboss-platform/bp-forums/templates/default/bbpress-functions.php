@@ -288,7 +288,7 @@ if ( ! class_exists( 'BBP_Default' ) ) :
 		 * @since BuddyBoss 1.2.8
 		 */
 		public function mentions_script() {
-
+			//error_log(basename(__FILE__).':: mentions_script ' );
 			// Special handling for New/Edit screens in wp-admin.
 			if ( is_admin() ) {
 				if (

@@ -354,7 +354,7 @@ function bp_has_activities( $args = '' ) {
 	/*
 	 * Query
 	 */
-
+	//error_log(basename(__FILE__).':: bp_has_activities :: r ::'. print_r($r, true));
 	$activities_template = new BP_Activity_Template( $r );
 
 	/**
@@ -1213,7 +1213,8 @@ function bp_get_activity_secondary_avatar( $args = '' ) {
 			$link    = bp_core_get_userlink( $item_id, false, true );
 
 			if ( empty( $alt ) ) {
-				$alt = sprintf( __( 'Profile photo of %s', 'buddyboss' ), bp_core_get_user_displayname( $activities_template->activity->secondary_item_id ) );
+				//$alt = sprintf( __( 'Profile photo of %s', 'buddyboss' ), bp_core_get_user_displayname( $activities_template->activity->secondary_item_id ) );
+				$alt = sprintf( __( 'Profile photo of %s', 'buddyboss' ), xprofile_get_field_data( FIELD_NAME_COMPANY, $activities_template->activity->secondary_item_id ) );
 			}
 
 			break;
@@ -2121,7 +2122,8 @@ function bp_get_activity_comment_name() {
 	} else {
 		$name = $activities_template->activity->current_comment->display_name;
 	}
-
+	$name=xprofile_get_field_data( FIELD_NAME_COMPANY, $activities_template->activity->current_comment->user_id );
+	//error_log(basename(__FILE__).':: bp_get_activity_comment_name :: '. print_r($activities_template->activity->current_comment, true));
 	/**
 	 * Filters the name of the author for the activity comment.
 	 *
@@ -3287,7 +3289,8 @@ function bp_mentioned_user_display_name( $user_id_or_username = false ) {
 function bp_get_mentioned_user_display_name( $user_id_or_username = false ) {
 
 	// Get user display name.
-	$name = bp_core_get_user_displayname( $user_id_or_username );
+	//$name = bp_core_get_user_displayname( $user_id_or_username );
+	$name = xprofile_get_field_data( FIELD_NAME_COMPANY, $user_id_or_username );
 
 	// If user somehow has no name, return this really lame string.
 	if ( empty( $name ) ) {

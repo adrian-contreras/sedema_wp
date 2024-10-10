@@ -1200,7 +1200,9 @@ function bp_nouveau_ajax_video_get_video_description() {
 	$can_view         = true === (bool) $video_privacy['can_view'];
 	$video            = new BP_Video( $video_id );
 	$user_domain      = bp_core_get_user_domain( $video->user_id );
-	$display_name     = bp_core_get_user_displayname( $video->user_id );
+	//$display_name     = bp_core_get_user_displayname( $video->user_id );
+	$display_name 	  = xprofile_get_field_data( FIELD_NAME_COMPANY, $video->user_id );
+
 	$time_since       = bp_core_time_since( $video->date_created );
 	add_filter( 'bb_get_blocked_avatar_url', 'bb_moderation_fetch_avatar_url_filter', 10, 3 );
 	$avatar           = bp_core_fetch_avatar(

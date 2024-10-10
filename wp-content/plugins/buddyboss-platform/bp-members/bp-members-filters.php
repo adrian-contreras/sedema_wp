@@ -579,9 +579,11 @@ function bb_core_prime_mentions_results() {
 		);
 
 		if ( ! empty( $user->display_name ) && ! bp_disable_profile_sync() ) {
-			$result->name = $user->display_name;
+			//$result->name = $user->display_name;
+			$result->name = xprofile_get_field_data( FIELD_NAME_COMPANY, $user->ID );
 		} else {
-			$result->name = bp_core_get_user_displayname( $user->ID );
+			//$result->name = bp_core_get_user_displayname( $user->ID );
+			$result->name = xprofile_get_field_data( FIELD_NAME_COMPANY, $user->ID );
 		}
 		$result->user_id = $user->ID;
 
@@ -616,9 +618,11 @@ function bb_core_prime_mentions_results() {
 			);
 
 			if ( ! empty( $user->display_name ) && ! bp_disable_profile_sync() ) {
-				$result->name = bp_core_get_user_displayname( $user->ID );
+				//$result->name = bp_core_get_user_displayname( $user->ID );
+				$result->name = xprofile_get_field_data( FIELD_NAME_COMPANY, $user->ID );
 			} else {
-				$result->name = bp_core_get_user_displayname( $user->ID );
+				//$result->name = bp_core_get_user_displayname( $user->ID );
+				$result->name = xprofile_get_field_data( FIELD_NAME_COMPANY, $user->ID );
 			}
 			$result->user_id = $user->ID;
 

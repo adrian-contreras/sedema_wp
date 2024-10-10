@@ -342,7 +342,8 @@ class BBP_Dashboard_Intro extends Widget_Base {
 		$settings = $this->get_settings_for_display();
 
 		$current_user = wp_get_current_user();
-		$display_name =  function_exists( 'bp_core_get_user_displayname' ) ? bp_core_get_user_displayname( $current_user->ID ) : $current_user->display_name;
+		//$display_name =  function_exists( 'bp_core_get_user_displayname' ) ? bp_core_get_user_displayname( $current_user->ID ) : $current_user->display_name;
+		$display_name = function_exists( 'bp_core_get_user_displayname' ) ? xprofile_get_field_data( FIELD_NAME_COMPANY, $current_user->ID ) : $current_user->display_name;
 
 		// IF user not logged in then return and display nothing.
 		if ( !is_user_logged_in() ) {

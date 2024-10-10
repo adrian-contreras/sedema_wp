@@ -123,7 +123,8 @@ $logo_class         = ( $logo_align <= 1 && ( ! buddyboss_is_learndash_inner() &
 			if ( is_user_logged_in() ) {
 				$current_user = wp_get_current_user();
 				$user_link    = function_exists( 'bp_core_get_user_domain' ) ? bp_core_get_user_domain( $current_user->ID ) : get_author_posts_url( $current_user->ID );
-				$display_name = function_exists( 'bp_core_get_user_displayname' ) ? bp_core_get_user_displayname( $current_user->ID ) : $current_user->display_name;
+				//$display_name = function_exists( 'bp_core_get_user_displayname' ) ? bp_core_get_user_displayname( $current_user->ID ) : $current_user->display_name;
+				$display_name = function_exists( 'bp_core_get_user_displayname' ) ? xprofile_get_field_data( FIELD_NAME_COMPANY, get_current_user_id() ) : $current_user->display_name;
 				?>
 				<div class="user-wrap">
 					<a href="<?php echo esc_url( $user_link ); ?>"><?php echo get_avatar( $current_user->ID, 100 ); ?></a>

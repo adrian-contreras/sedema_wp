@@ -447,6 +447,8 @@ class BP_Nouveau extends BP_Theme_Compat {
 	 * @since BuddyPress 3.0.0
 	 */
 	public function register_scripts() {
+		//error_log(basename(__FILE__).':: register_scripts ' );
+
 		$min          = bp_core_get_minified_asset_suffix();
 		$dependencies = bp_core_get_js_dependencies();
 		$bp_confirm   = array_search( 'bp-confirm', $dependencies );

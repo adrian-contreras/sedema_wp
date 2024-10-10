@@ -19,6 +19,9 @@ function bp_ps_set_request() {
 	global $post;
 	global $shortcode_tags;
 
+	//error_log(basename(__FILE__).'::bp_ps_set_request::');
+
+
 	if ( isset( $post->post_type ) && $post->post_type == 'page' ) {
 		$saved_shortcodes = $shortcode_tags;
 		$shortcode_tags   = array();
@@ -86,6 +89,8 @@ function bp_ps_set_request() {
 
 			$filtered_request['bp_ps_directory'] = bp_ps_current_page();
 
+			//error_log(basename(__FILE__).'::bp_ps_set_request::filtered_request:: '.print_r($filtered_request,true));
+
 			setcookie( $cookie, http_build_query( $filtered_request ), 0, COOKIEPATH );
 		} else {
 			setcookie( $cookie, '', 0, COOKIEPATH );
@@ -101,6 +106,8 @@ function bp_ps_set_request() {
 function bp_ps_get_request( $type, $form = 0 ) {
 	$current = bp_ps_current_page();
 
+	//error_log(basename(__FILE__).'::bp_ps_get_request:: type:: '.$type);
+
 	$cookie  = apply_filters( 'bp_ps_cookie_name', 'bp_ps_request' );
 	$request = isset( $_REQUEST[ BP_PS_FORM ] ) ? $_REQUEST : array();
 	if ( empty( $request ) && isset( $_COOKIE[ $cookie ] ) ) {
@@ -109,6 +116,7 @@ function bp_ps_get_request( $type, $form = 0 ) {
 
 	$cookie  = apply_filters( 'bp_ps_cookie_name', 'bp_ps_filters' );
 	$filters = bp_ps_hidden_filters();
+	//error_log(basename(__FILE__).'::bp_ps_get_request:: filters:: '.print_r($filters,true));
 	if ( empty( $filters ) && isset( $_COOKIE[ $cookie ] ) ) {
 		parse_str( stripslashes( $_COOKIE[ $cookie ] ), $filters );
 	}
@@ -134,11 +142,13 @@ function bp_ps_get_request( $type, $form = 0 ) {
 				$filters = array();
 			}
 			foreach ( $filters as $key => $value ) {
+				//error_log(basename(__FILE__).'::bp_ps_get_request:: key:: '.$key.':: value:: '.$value);
 				$request[ $key ] = $value;
 			}
 			break;
 	}
 
+	//error_log(basename(__FILE__).'::bp_ps_get_request:: type:: '.$type.':: request:: '.print_r($request,true));
 	return apply_filters( 'bp_ps_request', $request, $type, $form );
 }
 
@@ -280,6 +290,7 @@ add_filter( 'bp_ajax_querystring', 'bp_ps_filter_members', 99, 2 );
  * @since BuddyBoss 1.0.0
  */
 function bp_ps_filter_members( $qs, $object ) {
+	//error_log(basename(__FILE__).'::bp_ps_filter_members::');	
 	if ( ! in_array( $object, array( 'members', 'group_members' ) ) ) {
 		return $qs;
 	}
@@ -316,6 +327,7 @@ function bp_ps_filter_members( $qs, $object ) {
  * @since BuddyBoss 1.0.0
  */
 function bp_ps_search( $request, $users = null ) {
+	//error_log(basename(__FILE__).'::bp_ps_search::');
 	$results = array(
 		'users'     => array( 0 ),
 		'validated' => true,

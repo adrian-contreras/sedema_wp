@@ -91,3 +91,7 @@
     display: block !important;
     background-color: #ddd !important;
 }
+
+.footer-logo{
+    color: var(--bb-footer-text-color) !important;
+}

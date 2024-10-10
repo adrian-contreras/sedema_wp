@@ -130,7 +130,8 @@ class BP_Members_Suggestions extends BP_Suggestions {
 					'item_id' => $user->ID,
 				)
 			);
-			$result->name          = bp_core_get_user_displayname( $user->ID );
+			//$result->name          = bp_core_get_user_displayname( $user->ID );
+			$result->name          = xprofile_get_field_data( FIELD_NAME_COMPANY, $user->ID );
 			$result->user_id       = $user->ID;
 
 			if ( isset( $this->args['count_total'] ) && $this->args['count_total'] ) {

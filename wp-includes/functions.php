@@ -3043,9 +3043,15 @@ function wp_check_filetype( $filename, $mimes = null ) {
 	}
 	$type = false;
 	$ext  = false;
+	error_log(basename(__FILE__).'::_wp_handle_upload:: filename ::'.$filename);
+
+	//error_log(basename(__FILE__).'::_wp_handle_upload:: mimes ::'.print_r($mimes,true));
+
 
 	foreach ( $mimes as $ext_preg => $mime_match ) {
 		$ext_preg = '!\.(' . $ext_preg . ')$!i';
+		//error_log(basename(__FILE__).'::_wp_handle_upload:: ext_preg ::'.print_r($ext_preg,true));
+		if ($mime_match == 'video/mp4')error_log(basename(__FILE__).'::_wp_handle_upload:: ext_preg ::'.$ext_preg.' ::'.$filename.'::');
 		if ( preg_match( $ext_preg, $filename, $ext_matches ) ) {
 			$type = $mime_match;
 			$ext  = $ext_matches[1];
@@ -3088,6 +3094,12 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 	$wp_filetype = wp_check_filetype( $filename, $mimes );
 	$ext         = $wp_filetype['ext'];
 	$type        = $wp_filetype['type'];
+
+
+	error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: wp_filetype ::'.print_r($wp_filetype,true));
+	error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: ext ::'.$ext);
+	error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: type ::'.$type);
+	error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: mimes ::'.print_r($mimes,true));
 
 	// We can't do any further validation without a file to work with.
 	if ( ! file_exists( $file ) ) {

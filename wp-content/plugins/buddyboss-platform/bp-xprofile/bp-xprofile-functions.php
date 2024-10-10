@@ -1530,6 +1530,7 @@ function bp_activity_get_user_mentionname( $user_id ) {
  * @since BuddyBoss 1.0.0
  */
 function bp_at_mention_default_options() {
+	//error_log(basename(__FILE__).':: bp_at_mention_default_options ' );
 	return apply_filters(
 		'bp_at_mention_js_options',
 		array(

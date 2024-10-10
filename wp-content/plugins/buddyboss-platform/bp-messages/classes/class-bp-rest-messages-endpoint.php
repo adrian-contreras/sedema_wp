@@ -852,7 +852,8 @@ class BP_REST_Messages_Endpoint extends WP_REST_Controller {
 				return array(
 					'id'         => $result->user_id,
 					'userhandle' => "@{$result->ID}",
-					'text'       => $result->name,
+					//'text'       => $result->name,
+					'text'       => xprofile_get_field_data( FIELD_NAME_COMPANY, $result->user_id ),
 					'image'      => $result->image,
 				);
 			},

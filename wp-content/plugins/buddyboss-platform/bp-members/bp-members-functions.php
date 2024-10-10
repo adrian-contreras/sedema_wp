@@ -462,7 +462,9 @@ function bp_core_get_user_email( $user_id ) {
  *                     no match.
  */
 function bp_core_get_userlink( $user_id, $no_anchor = false, $just_link = false ) {
-	$display_name = bp_core_get_user_displayname( $user_id );
+	//$display_name = bp_core_get_user_displayname( $user_id );
+	
+	$display_name = xprofile_get_field_data( FIELD_NAME_COMPANY, $user_id );
 
 	if ( empty( $display_name ) ) {
 		return false;

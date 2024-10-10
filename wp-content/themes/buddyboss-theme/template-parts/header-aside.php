@@ -50,7 +50,8 @@ $is_lms_inner       = ( class_exists( 'SFWD_LMS' ) && buddyboss_is_learndash_inn
 					<?php
 					$current_user = wp_get_current_user();
 					$user_link    = function_exists( 'bp_core_get_user_domain' ) ? bp_core_get_user_domain( $current_user->ID ) : get_author_posts_url( $current_user->ID );
-					$display_name = function_exists( 'bp_core_get_user_displayname' ) ? bp_core_get_user_displayname( $current_user->ID ) : $current_user->display_name;
+					//$display_name = function_exists( 'bp_core_get_user_displayname' ) ? bp_core_get_user_displayname( $current_user->ID ) : $current_user->display_name;
+					$display_name = function_exists( 'bp_core_get_user_displayname' ) ? xprofile_get_field_data( FIELD_NAME_COMPANY, $current_user->ID ) : $current_user->display_name;
 					?>
 
 					<a class="user-link" href="<?php echo esc_url( $user_link ); ?>">

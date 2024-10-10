@@ -15,6 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * @since BuddyPress 2.1.0
  */
 function bp_activity_mentions_script() {
+	//error_log(basename(__FILE__).':: bp_activity_mentions_script ' );
 	if ( ! bp_activity_maybe_load_mentions_scripts() ) {
 		return;
 	}
@@ -30,7 +31,8 @@ function bp_activity_mentions_script() {
 	}
 
 	$min = bp_core_get_minified_asset_suffix();
-
+	//error_log(basename(__FILE__).':: bp_activity_mentions_script :: ' . $min);
+	//$min = '';
 	wp_enqueue_script( 'bp-mentions', buddypress()->plugin_url . "bp-core/js/mentions{$min}.js", array( 'jquery', 'jquery-atwho' ), bp_get_version(), true );
 	wp_enqueue_style( 'bp-mentions-css', buddypress()->plugin_url . "bp-core/css/mentions{$min}.css", array(), bp_get_version() );
 

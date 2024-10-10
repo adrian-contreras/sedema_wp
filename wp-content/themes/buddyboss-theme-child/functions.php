@@ -195,12 +195,12 @@ function custom_wpforms_validation($fields, $entry, $form_data) {
 add_action('wpforms_process_complete', 'custom_wpforms_process_complete', 10, 4);
 
 function custom_wpforms_process_complete($fields, $entry, $form_data, $entry_id){ 
-    //error_log(basename(__FILE__));    
+    //error_log(basename(__FILE__));
     // Verificar el ID del formulario para asegurarse de que solo se procese el formulario específico
     $form_id = 139; // Reemplaza con tu ID de formulario
     $file_upload_field_id = 10;
     $count_files=0;
-    $field_id_ = 4; //Nombre de la empresa
+    //$field_id_ = 4; /*Nombre de la empresa*/
 
     if ($form_data['id'] != $form_id) {
         return;
@@ -215,10 +215,10 @@ function custom_wpforms_process_complete($fields, $entry, $form_data, $entry_id)
         }
     }
     
-    $field_value = xprofile_get_field_data( $field_id_, get_current_user_id() );
+    //$field_value = xprofile_get_field_data( $field_id_, get_current_user_id() );
 
     $content = '';
-    $content .= sprintf('<strong>%s:</strong> <br>', sanitize_text_field($field_value));
+    //$content .= sprintf('<strong>%s</strong> <br>', sanitize_text_field($field_value));
     
     foreach ($fields as $field_id => $field) {
         $content .= sprintf('<strong>%s:</strong> %s<br>', sanitize_text_field($field['name']), sanitize_text_field($field['value']));
@@ -230,13 +230,17 @@ function custom_wpforms_process_complete($fields, $entry, $form_data, $entry_id)
     }else{
         array_push($places,0);
     }
+    error_log(basename(__FILE__).'::custom_wpforms_process_complete:: places ::'.json_encode($places));
     $thumbnails_data='';
     if (isset($entry['fields']['thumbnails']) && !empty($entry['fields']['thumbnails'])) {
         $thumbnails_data = json_decode($entry['fields']['thumbnails'], true);
     }
+    //error_log(basename(__FILE__).'::custom_wpforms_process_complete:: thumbnails_data ::'.json_encode($thumbnails_data));
 
     $activity_ids=add_activities($places,$content);
     
+    error_log(basename(__FILE__).'::custom_wpforms_process_complete:: activity_ids ::'.json_encode($activity_ids));
+
     if(isset($activity_ids)){
         if(is_array($activity_ids) AND count($activity_ids)>0){
             $_ALL_FILES = array();
@@ -250,17 +254,20 @@ function custom_wpforms_process_complete($fields, $entry, $form_data, $entry_id)
             }else{
                 array_push($_ALL_FILES, $_FILES);
             }
-
+            //error_log(basename(__FILE__).'::custom_wpforms_process_complete:: _ALL_FILES ::'.print_r($_ALL_FILES,true));
+            //return;
             foreach($activity_ids as $activity_id){
                 //$attachment_ids=add_attachment($_FILES,$activity_id);
                 $attachment_ids=add_attachment(array_pop($_ALL_FILES),$activity_id);
-                                
+                
+                error_log(basename(__FILE__).'::custom_wpforms_process_complete:: attachment_ids ::'.json_encode($attachment_ids));
+
                 if(isset($attachment_ids)){
                     if(is_array($attachment_ids) AND count($attachment_ids)>0){
                         $media_ids = array();
                         $video_ids = array();
                         $media_done=0;
-                        foreach($attachment_ids as $attachment){
+                        foreach($attachment_ids as $attachment){                            
                             $multimedia_id=add_activities_attachment_meta($activity_id,$attachment['attachment_id'],'public',$media_done,$attachment['file'],$thumbnails_data,$count_files);
                             if (str_starts_with($attachment['file']['type'], 'image')) {
                                 array_push($media_ids,$multimedia_id);
@@ -271,6 +278,10 @@ function custom_wpforms_process_complete($fields, $entry, $form_data, $entry_id)
 
                             $media_done ++;
                         }
+
+                        error_log(basename(__FILE__).'::custom_wpforms_process_complete:: media_ids ::'.json_encode($media_ids));
+                        error_log(basename(__FILE__).'::custom_wpforms_process_complete:: video_ids ::'.json_encode($video_ids));
+
                         if(count($media_ids)>0){
                             bp_activity_update_meta( $activity_id, 'bp_media_ids', implode( ',', $media_ids ) );
                         }
@@ -288,6 +299,24 @@ function custom_wpforms_process_complete($fields, $entry, $form_data, $entry_id)
     }    
     
 }
+
+
+
+function save_file_info($entry_id, $filename, $filepath, $filesize) {
+    global $wpdb;
+    $wpdb->insert(
+        $wpdb->prefix . 'wpforms_file_uploads',
+        array(
+            'entry_id' => $entry_id,
+            'file_name' => $filename,
+            'file_path' => $filepath,
+            'file_size' => $filesize,
+            'uploaded_at' => current_time('mysql')
+        ),
+        array('%d', '%s', '%s', '%d', '%s')
+    );
+}
+
 
 	/**
 	 * Create activities.
@@ -346,7 +375,7 @@ function add_activities($_places,$_content){
         }
         
     }
-    error_log(basename(__FILE__).'::add_activities::_activity_ids'.json_encode($_activity_ids));
+    //error_log(basename(__FILE__).'::add_activities::_activity_ids'.json_encode($_activity_ids));
     return $_activity_ids;
 }
 
@@ -363,7 +392,7 @@ function add_activities($_places,$_content){
 // path de carga imagenes wp-content/uploads/bb_medias/2024/
 // path de carga videos   wp-content/uploads/bb_videos/
 function add_attachment($_files_,$_activity_id){
-    error_log(basename(__FILE__).'::add_attachment::');
+    //error_log(basename(__FILE__).'::add_attachment::');
     $_attachment_ids = array();
     $file_upload_field_id = 10; // ID del campo de carga de archivos
     if (isset($_files_['wpforms']['name']['fields'][$file_upload_field_id])) {
@@ -388,7 +417,7 @@ function add_attachment($_files_,$_activity_id){
 
                     $attachment_id = '';
 
-                    error_log(basename(__FILE__).'::add_attachment::$uploaded_file::'.json_encode($uploaded_file));
+                    //error_log(basename(__FILE__).'::add_attachment::$uploaded_file::'.json_encode($uploaded_file));
                     if (str_starts_with($file_type, 'video')) {
                         //error_log(basename(__FILE__).'::add_attachment::$uploaded_file::VIDEO');
                         $attachment_id = bp_video_handle_sideload($uploaded_file);
@@ -410,7 +439,7 @@ function add_attachment($_files_,$_activity_id){
                         }
                     }
                     
-                    error_log(basename(__FILE__).'::add_attachment::$attachment_id::'.$attachment_id);
+                    //error_log(basename(__FILE__).'::add_attachment::$attachment_id::'.$attachment_id);
                     // POR VERIFICAR PORQUE SE ALMACENA DOS VECES
                     /*
                     if(!is_wp_error($attachment_id) ){
@@ -440,16 +469,21 @@ function clone_files_array($_files) {
         foreach ($_files['wpforms']['name']['fields'][$file_upload_field_id] as $key => $filename) {
             if (!empty($filename)) {
                 $info = pathinfo($filename);
-                $hash = substr(md5(uniqid($filename, true)), 0, 8);
-                $new_filename = $info['filename'] . '_' . $hash . '.' . $info['extension'];
-                
+                $hash = substr(md5(uniqid($filename, true)), 0, 6);
+                //$new_filename = $info['filename'] . '_' . $hash . '.' . $info['extension'];
+                //$new_filename = sanitize_text_field($info['filename'] . ' ' . $key . '.' . $info['extension']);
+                $new_filename = $info['basename'];
                 $cloned_files['wpforms']['name']['fields'][$file_upload_field_id][$key] = $new_filename;
                 
                 // Clonar el archivo temporal
                 $orig_tmp_name = $_files['wpforms']['tmp_name']['fields'][$file_upload_field_id][$key];
-                $new_tmp_name = '/tmp/' . $hash;
+                $new_tmp_name = '/tmp/php' . $hash;
                 copy($orig_tmp_name, $new_tmp_name);
                 
+                $info_new = pathinfo($new_tmp_name);
+                error_log(basename(__FILE__).'::clone_files_array:: pathinfo ::'.$info_new['dirname'] . ' '.$info_new['basename']);
+                
+
                 $cloned_files['wpforms']['tmp_name']['fields'][$file_upload_field_id][$key] = $new_tmp_name;
             }
         }
@@ -476,9 +510,7 @@ function generate_new_tmp_file($original_tmp_file, $new_filename) {
 
 //privacy=[onlyme,loggedin,public]
 
-function add_activities_attachment_meta($_activity_id,$_attachment_id, $_privacy, $_order,$_file,$_thumbnails_data,$_count_files){
-    //error_log(basename(__FILE__).'::add_activities_attachment_meta::');
-    
+function add_activities_attachment_meta($_activity_id,$_attachment_id, $_privacy, $_order,$_file,$_thumbnails_data,$_count_files){   
     $media_args = array(
         'attachment_id' => $_attachment_id,
         'user_id'       => bp_loggedin_user_id(),
@@ -575,8 +607,10 @@ function add_activities_attachment_meta($_activity_id,$_attachment_id, $_privacy
             }else{
                 bp_activity_add_meta( $_activity_id, 'bp_video_ids', $media_id );
             }            
-
+            error_log(basename(__FILE__).'::add_activities_attachment_meta::media_id:: '.$media_id);
             $attachment_url    = bb_video_get_symlink( $media_id );
+            //$attachment_url    = bb_video_create_symlinks( $media_id );
+            error_log(basename(__FILE__).'::add_activities_attachment_meta::attachment_url:: '.$attachment_url);
             
 
             $info = pathinfo($_file['name']);
@@ -645,7 +679,7 @@ function ocultar_barra_navegacion_buddyboss() {
 add_action('wp_head', 'ocultar_barra_navegacion_buddyboss');
 
 
-function custom_offer_tab_screen() {
+/*function custom_offer_tab_screen() {
     add_action('bp_template_content', 'custom_offer_tab_content');
     bp_core_load_template(apply_filters('bp_core_template_plugin', 'members/single/plugins'));
 }
@@ -660,7 +694,7 @@ function custom_offer_tab_content() {
     } else {
         echo '<p>Página no encontrada.</p>';
     }
-}
+}*/
 
 // Función para recuperar los grupos del usuario autenticado
 function custom_user_groups_shortcode() {
@@ -796,7 +830,7 @@ function add_private_message_button() {
 function add_private_message_button_to_activity() {
     add_action( 'bp_activity_entry_meta', 'add_private_message_button', 20 );
 }
-
+/*
 function custom_news_feed_title() {
     ?>
     <script type="text/javascript">
@@ -810,11 +844,11 @@ function custom_news_feed_title() {
     </script>
     <?php   
 }
-
+*/
 if(is_user_logged_in()){
     add_action( 'bp_init', 'add_private_message_button_to_activity' );
 
-    add_action( 'wp_head', 'custom_news_feed_title' );
+    //add_action( 'wp_head', 'custom_news_feed_title' );
 }
 
 function custom_styles_and_scripts() {
@@ -840,14 +874,16 @@ add_action( 'wp_enqueue_scripts', 'custom_styles_and_scripts' );
 function check_if_url_ends_with($_segment) {
     // Obtener la URL actual
     $current_url = home_url( add_query_arg( null, null ) );
-
+    //error_log(basename(__FILE__).':: check_if_url_ends_with :: current_url ::'. $current_url);
     // Analizar la URL para obtener los segmentos de la ruta
     $parsed_url = wp_parse_url( $current_url );
+    //error_log(basename(__FILE__).':: check_if_url_ends_with :: parsed_url ::'. print_r($parsed_url, true));
+
     $path = $parsed_url['path'];
 
     // Dividir la ruta en segmentos
     $segments = explode('/', trim($path, '/'));
-
+    //error_log(basename(__FILE__).':: check_if_url_ends_with :: segments ::'. print_r($segments, true));
     // Verificar si el último segmento es 'offer'
     if ( end($segments) === $_segment ) {
         return true;
@@ -857,8 +893,8 @@ function check_if_url_ends_with($_segment) {
 
 function custom_content_before_news_feed_title() {
     // Contenido personalizado que se insertará antes del título "News Feed"
-    echo '<header class="entry-header"><h1 class="entry-title">Plataforma de empresas circulares</h1></header>';
-    echo '<p>En esta Plataforma de Economía Circular podrás ofrecer y adquirir excedentes de materiales y productos para evitar su desperdicio y maximizar su aprovechamiento. Podrás vincularte con otras empresas que, como la tuya, están interesadas en aprovechar oportunidades económicas al mismo tiempo que contribuyen a cuidar el medio ambiente.</p>';
+    echo '<header class="entry-header"><h1 class="entry-title">Plataforma de encadenamiento circular</h1></header>';
+    echo '<p>En esta Plataforma de encadenamiento circular podrás ofrecer y adquirir excedentes de materiales y productos para evitar su desperdicio y maximizar su aprovechamiento. Podrás vincularte con otras empresas que, como la tuya, están interesadas en aprovechar oportunidades económicas al mismo tiempo que contribuyen a cuidar el medio ambiente.</p>';
     echo '<p>Si aún no estás registrado, ¡Súmate, conoce y aprovecha los beneficios que esta plataforma puede traer para tu empresa y el medio ambiente!</p>';
     echo '<p>';
     echo 'Beneficios para tu empresa y el medio ambiente';
@@ -881,7 +917,8 @@ function custom_content_before_news_feed_title() {
         var entryTitle = document.querySelector('.entry-title');
         //console.log(logoContainer);
         if(entryTitle){
-            if(entryTitle.innerText==='News Feed')entryTitle.innerText='';
+            //if(entryTitle.innerText==='News Feed')entryTitle.innerText='';
+            if(entryTitle.innerText==='Muro General')entryTitle.innerText='';
         }
     });
     </script>
@@ -936,4 +973,61 @@ function check_alias_uniqueness() {
 }
 add_action('wp_ajax_check_alias_uniqueness', 'check_alias_uniqueness');
 add_action('wp_ajax_nopriv_check_alias_uniqueness', 'check_alias_uniqueness');
+
+
+function enviar_correo_nuevo_mensaje( $message ) {
+    // Obtener información del mensaje
+    $sender_id = $message->sender_id;
+    $sender = get_userdata( $sender_id );
+    $thread_id = $message->thread_id;
+    $recipients = BP_Messages_Thread::get_recipients_for_thread( $thread_id );
+    
+    // Excluir al remitente de la lista de destinatarios
+    unset( $recipients[ $sender_id ] );
+    
+    foreach ( $recipients as $recipient ) {
+        $to = get_userdata( $recipient->user_id )->user_email;
+        $subject = 'Nuevo mensaje en ' . get_bloginfo( 'name' );
+        
+        // Crear el cuerpo del correo
+        $body = "Hola " . bp_core_get_user_displayname( $recipient->user_id ) . ",<br>";
+        //$body .= "Has recibido un nuevo mensaje de " . $sender->display_name . " en " . get_bloginfo( 'name' ) . ".\n\n";
+        $body .= "Has recibido un nuevo mensaje de " . $sender->display_name . "<br>";
+        $body .= "<b>Mensaje:</b> " . wp_trim_words( $message->message, 20 ) . "...<br>"; // Limita el mensaje a 20 palabras
+        $body .= "Para ver el mensaje completo y responder, por favor visita:<br>";
+        $body .= bp_core_get_user_domain( $recipient->user_id ) . bp_get_messages_slug() . '/view/' . $thread_id . '/';
+        
+        $headers = array('Content-Type: text/html; charset=UTF-8');
+        
+        // Enviar el correo
+        wp_mail( $to, $subject, $body, $headers );
+    }
+}
+
+add_action( 'messages_message_sent', 'enviar_correo_nuevo_mensaje' );
+
+
+function sedema_address_shortcode() {
+    $output = '';
+    $output .= '<strong>SECRETARÍA</strong><br/>';
+    $output .= '<strong>DEL MEDIO AMBIENTE</strong><br/><br/>';
+    $output .= '<strong>Atención ciudadana</strong><br/><br/>';
+    $output .= '<strong>Dirección</strong>: Plaza de la Constitución 1, 3er piso<br/>Colonia Centro, Alcaldía Cuauhtémoc C.P. 06000, Ciudad de México<br/>';
+    $output .= '<strong>Teléfonos</strong>: 5553458187, 5553458188<br/>';
+    $output .= '<strong>Correo electrónico</strong>: atencionciudadana@sedema.cdmx.gob.mx<br/>';
+    $output .= '<strong>Horario</strong>: Miércoles 9:00 a 13:00 horas';
+    return $output;
+}
+add_shortcode('sedema_address', 'sedema_address_shortcode');
+
+
+function define_global_constant() {
+    // Verificar si la constante no está definida aún
+    if ( !defined('FIELD_NAME_COMPANY') ) {
+        // Definir la constante global
+        define( 'FIELD_NAME_COMPANY', '4' );
+    }
+}
+add_action( 'after_setup_theme', 'define_global_constant' );
+
 ?>

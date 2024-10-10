@@ -8,7 +8,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2024-09-13 20:07+0000\n"
+"PO-Revision-Date: 2024-09-26 15:18+0000\n"
 "Last-Translator: \n"
 "Language-Team: Español de México\n"
 "Language: es_MX\n"
@@ -4121,17 +4121,17 @@ msgstr "Compras y dinero"
 #: assets/icons/font-map.php:3
 msgctxt "BuddyBoss Icon"
 msgid "Shopping Bag"
-msgstr "Bolsa de la compra"
+msgstr "Bolsa de compra"
 
 #: assets/icons/font-map.php:3
 msgctxt "BuddyBoss Icon"
 msgid "Shopping Basket"
-msgstr "Cesta de la compra"
+msgstr "Cesto de compra"
 
 #: assets/icons/font-map.php:3
 msgctxt "BuddyBoss Icon"
 msgid "Shopping Cart"
-msgstr "Carro de la compra"
+msgstr "Carrito de compra"
 
 #: assets/icons/font-map.php:3
 msgctxt "BuddyBoss Icon"
@@ -8025,7 +8025,7 @@ msgstr "Rellenar página"
 
 #: inc/plugins/buddyboss-menu-icons/includes/settings.php:622
 msgid "Filled"
-msgstr "Completado"
+msgstr "Rellenado"
 
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/buddyboss_legacy.php:1198
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/elusive.php:556
@@ -10209,7 +10209,7 @@ msgstr "Lineal"
 
 #: inc/plugins/buddyboss-menu-icons/includes/settings.php:618
 msgid "Lined"
-msgstr "Forrado"
+msgstr "Con líneas"
 
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/elusive.php:871
 msgid "Lines"
@@ -12904,7 +12904,7 @@ msgstr "Estado de la publicación"
 
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/dashicons.php:564
 msgid "Post Trash"
-msgstr "Publicar basura"
+msgstr "Publicación basura"
 
 #: inc/plugins/woocommerce-helper.php:154
 #: inc/plugins/woocommerce-helper.php:164
@@ -14561,11 +14561,11 @@ msgstr "Barra lateral de la tienda"
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/fa.php:2709
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/foundation-icons.php:1176
 msgid "Shopping Bag"
-msgstr "Bolsa de la compra"
+msgstr "Bolsa de compra"
 
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/fa.php:2714
 msgid "Shopping Basket"
-msgstr "Cesta de la compra"
+msgstr "Cesto de compra"
 
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/buddyboss_legacy.php:2048
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/elusive.php:1256
@@ -14573,7 +14573,7 @@ msgstr "Cesta de la compra"
 #: inc/plugins/buddyboss-menu-icons/vendor/kucrut/icon-picker/includes/types/foundation-icons.php:1181
 #: template-parts/cart-dropdown.php:17
 msgid "Shopping Cart"
-msgstr "Carro de la compra"
+msgstr "Carrito de compra"
 
 #: inc/admin/options-init.php:1277 inc/admin/options-init.php:1326
 msgid "Shopping Cart - requires WooCommerce"

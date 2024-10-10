@@ -1698,16 +1698,19 @@ function bp_nouveau_ajax_dsearch_recipients() {
 
 	$results_total = apply_filters( 'bp_members_suggestions_results_total', $results['total'] );
 	$results       = apply_filters( 'bp_members_suggestions_results', isset( $results['members'] ) ? $results['members'] : array() );
-
+	//error_log(basename(__FILE__).':: mi_filtro_actividades :: _REQUEST ::'. print_r($results, true));
+	
 	wp_send_json_success(
 		array(
 			'results'     => array_map(
 				function ( $result ) {
 					return array(
 						'id'    => "@{$result->ID}",
-						'text'  => $result->name,
+						//'text'  => $result->name,
+						'text'  => xprofile_get_field_data( FIELD_NAME_COMPANY, $result->user_id ),
 						'image' => $result->image,
-						'html'  => '<div class="cur"><img class="avatar" src="' . esc_url( $result->image ) . '"><span class="username"><strong>' . $result->name . '</strong></div>',
+						//'html'  => '<div class="cur"><img class="avatar" src="' . esc_url( $result->image ) . '"><span class="username"><strong>' . $result->name . '</strong></div>',
+						'html'  => '<div class="cur"><img class="avatar" src="' . esc_url( $result->image ) . '"><span class="username"><strong>' . xprofile_get_field_data( FIELD_NAME_COMPANY, $result->user_id ) . '</strong></div>',
 					);
 				},
 				$results
@@ -3113,7 +3116,8 @@ function bb_nouveau_ajax_moderated_recipient_list() {
 									)
 								)
 							);
-							$user_name = bp_core_get_user_displayname( $recipient->user_id );
+							//$user_name = bp_core_get_user_displayname( $recipient->user_id );
+							$user_name = xprofile_get_field_data( FIELD_NAME_COMPANY, $recipient->user_id );
 							?>
 							<div class="user-item-wrp" id="user-<?php echo esc_attr( $recipient->user_id ); ?>">
 								<?php if ( ! empty ( bp_core_get_user_domain( $recipient->user_id ) ) ) { ?>

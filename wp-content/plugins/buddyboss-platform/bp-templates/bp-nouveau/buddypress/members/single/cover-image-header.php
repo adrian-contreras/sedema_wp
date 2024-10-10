@@ -131,7 +131,7 @@ if ( bp_is_my_profile() ) {
 
 					<div class="bb-user-content-wrap">
 						<div class="flex align-items-center member-title-wrap">
-							<h2 class="user-nicename"><?php echo wp_kses_post( bp_core_get_user_displayname( bp_displayed_user_id() ) ); ?></h2>
+							<h2 class="user-nicename"><?php /*echo wp_kses_post( bp_core_get_user_displayname( bp_displayed_user_id() ) );*/ echo wp_kses_post( xprofile_get_field_data( FIELD_NAME_COMPANY, bp_displayed_user_id() ) );?></h2>
 
 							<?php
 							if ( true === bp_member_type_enable_disable() && true === bp_member_type_display_on_profile() && $is_enabled_profile_type ) {

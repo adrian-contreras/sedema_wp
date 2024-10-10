@@ -945,6 +945,9 @@ function bp_get_member_name() {
 	}
 
 	$list_fields = bp_xprofile_get_hidden_fields_for_user( $members_template->member->ID, bp_loggedin_user_id() );
+
+
+	
 	if ( empty( $list_fields ) ) {
 		$full_name = $members_template->member->fullname;
 	} else {
@@ -964,6 +967,7 @@ function bp_get_member_name() {
 	 *
 	 * @param string $fullname Display name for current member.
 	 */
+	$full_name = xprofile_get_field_data( FIELD_NAME_COMPANY, $members_template->member->ID );
 	return apply_filters( 'bp_get_member_name', trim( $full_name ) );
 }
 	add_filter( 'bp_get_member_name', 'wp_filter_kses' );

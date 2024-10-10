@@ -29,10 +29,12 @@ window.bp = window.bp || {};
 	 * @since BuddyPress 2.1.0
 	 */
 	$.fn.bp_mentions = function ( options, suggestions, mentions ) {
+		//console.log('mentions.js :: bp_mentions');
 		if ( $.isArray( options ) ) {
 			options = { data: options };
 		}
-
+		//console.log('mentions.js :: bp_mentions::options'+options);
+		//console.log(options);
 		if ( ! suggestions ) {
 			suggestions = {};
 		}
