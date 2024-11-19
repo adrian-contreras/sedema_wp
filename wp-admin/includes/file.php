@@ -800,7 +800,7 @@ function validate_file_to_edit( $file, $allowed_files = array() ) {
  * }
  */
 function _wp_handle_upload( &$file, $overrides, $time, $action ) {
-	error_log(basename(__FILE__).'::_wp_handle_upload:: file ::'.print_r($file,true));	
+	//error_log(basename(__FILE__).'::_wp_handle_upload:: file ::'.print_r($file,true));	
 	// The default error handler.
 	if ( ! function_exists( 'wp_handle_upload_error' ) ) {
 		function wp_handle_upload_error( &$file, $message ) {
@@ -914,6 +914,7 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 
 	// If you override this, you must provide $ext and $type!!
 	$test_type = isset( $overrides['test_type'] ) ? $overrides['test_type'] : true;
+	//$test_type = false; //modificado para que funcionara
 	$mimes     = isset( $overrides['mimes'] ) ? $overrides['mimes'] : null;
 
 	// A correct form post will pass this test.
@@ -949,7 +950,8 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 
 		return call_user_func_array( $upload_error_handler, array( &$file, $error_msg ) );
 	}
-	error_log(basename(__FILE__).'::_wp_handle_upload:: file :: before :: '.print_r($file,true));	
+	//error_log(basename(__FILE__).'::_wp_handle_upload:: file :: before :: '.print_r($file,true));	
+	//error_log(basename(__FILE__).'::_wp_handle_upload:: file :: before :: '.print_r($file,true));	
 	// A correct MIME type will pass this test. Override $mimes or use the upload_mimes filter.
 	if ( $test_type ) {
 		$wp_filetype     = wp_check_filetype_and_ext( $file['tmp_name'], $file['name'], $mimes );
@@ -961,13 +963,14 @@ function _wp_handle_upload( &$file, $overrides, $time, $action ) {
 		if ( $proper_filename ) {
 			$file['name'] = $proper_filename;
 		}
-		error_log(basename(__FILE__).'::_wp_handle_upload:: mimes ::'.$mimes);
-		error_log(basename(__FILE__).'::_wp_handle_upload:: wp_filetype ::'.print_r($wp_filetype,true));
-		error_log(basename(__FILE__).'::_wp_handle_upload:: ext ::'.$ext);
-		error_log(basename(__FILE__).'::_wp_handle_upload:: type ::'.$type);
-		error_log(basename(__FILE__).'::_wp_handle_upload:: proper_filename ::'.$proper_filename);
-		error_log(basename(__FILE__).'::_wp_handle_upload:: current_user_can ::'.current_user_can( 'unfiltered_upload' ));
-
+		
+		//error_log(basename(__FILE__).'::_wp_handle_upload:: mimes ::'.$mimes);
+		//error_log(basename(__FILE__).'::_wp_handle_upload:: wp_filetype ::'.print_r($wp_filetype,true));
+		//error_log(basename(__FILE__).'::_wp_handle_upload:: ext ::'.$ext);
+		//error_log(basename(__FILE__).'::_wp_handle_upload:: type ::'.$type);
+		//error_log(basename(__FILE__).'::_wp_handle_upload:: proper_filename ::'.$proper_filename);
+		//error_log(basename(__FILE__).'::_wp_handle_upload:: current_user_can ::'.current_user_can( 'unfiltered_upload' ));
+		
 		if ( ( ! $type || ! $ext ) && ! current_user_can( 'unfiltered_upload' ) ) {
 			return call_user_func_array( $upload_error_handler, array( &$file, __( 'Sorry, you are not allowed to upload this file type.' ) ) );
 		}

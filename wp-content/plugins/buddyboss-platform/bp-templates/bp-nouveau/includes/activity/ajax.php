@@ -567,6 +567,8 @@ function bp_nouveau_ajax_get_activity_objects() {
  * @return string JSON reply.
  */
 function bp_nouveau_ajax_post_update() {
+	//error_log(basename(__FILE__).'::bp_nouveau_ajax_post_update::');
+	//error_log(basename(__FILE__).'::bp_nouveau_ajax_post_update::_POST::'.print_r($_POST,true));
 	$bp = buddypress();
 
 	if ( ! is_user_logged_in() || empty( $_POST['_wpnonce_post_update'] ) || ! wp_verify_nonce( $_POST['_wpnonce_post_update'], 'post_update' ) ) {

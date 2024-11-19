@@ -779,7 +779,8 @@ function bp_video_add_handler( $videos = array(), $privacy = 'public', $content 
  * @since BuddyBoss 1.7.0
  */
 function bp_video_preview_image_by_js( $video ) {
-	//error_log(basename(__FILE__).'::bp_video_preview_image_by_js::$video::'.json_encode($video));
+	//error_log(basename(__FILE__).'::bp_video_preview_image_by_js::$video::'.print_r($video,true));
+	//error_log(basename(__FILE__).'::bp_video_preview_image_by_js::');
 	/**
 	 * Hook before video js preview image.
 	 *
@@ -815,7 +816,7 @@ function bp_video_preview_image_by_js( $video ) {
 
 	$thumbnail = bp_video_base64_to_jpeg( $video['js_preview'], $thumbnail );
 
-	//error_log(basename(__FILE__).'::bp_video_preview_image_by_js::$thumbnail::'.json_encode($thumbnail));
+	//error_log(basename(__FILE__).'::bp_video_preview_image_by_js::$thumbnail::'.print_r($thumbnail,true));
 
 	if ( file_exists( $thumbnail ) ) {
 		$upload_file = wp_upload_bits( $file_name, null, file_get_contents( $thumbnail ) ); // phpcs:ignore
@@ -880,7 +881,7 @@ function bp_video_preview_image_by_js( $video ) {
  * @since BuddyBoss 1.7.0
  */
 function bp_video_add_generate_thumb_background_process( $video_id ) {
-	//error_log(basename(__FILE__).'::bp_video_add_generate_thumb_background_process::'); 
+	error_log(basename(__FILE__).'::bp_video_add_generate_thumb_background_process::'); 
 	if ( class_exists( 'FFMpeg\FFMpeg' ) ) {
 		global $bb_background_updater;
 		$ffmpeg = bb_video_check_is_ffmpeg_binary();
@@ -987,14 +988,17 @@ function bp_video_background_create_thumbnail( $video ) {
 		return;
 	} elseif ( class_exists( 'FFMpeg\FFMpeg' ) ) {
 		$ffmpeg = bb_video_check_is_ffmpeg_binary();
-		if ( ! empty( trim( $ffmpeg->error ) ) ) {
+		//error_log(basename(__FILE__).'::bp_video_background_create_thumbnail::isset'.isset($ffmpeg->error)); 
+		//if ( ! empty( trim( $ffmpeg->error ) ) ) {
+		if ( ! empty( trim( isset($ffmpeg->error)? $ffmpeg->error : "" ) ) ) {
 			return;
 		}
 	}
 
 	$video_attachment_id = $video->attachment_id;
 
-	if ( empty( trim( $ffmpeg->error ) ) ) {
+	//if ( empty( trim( $ffmpeg->error ) ) ) {
+	if ( empty( trim( isset($ffmpeg->error)? $ffmpeg->error : "" ) ) ) {
 
 		try {
 

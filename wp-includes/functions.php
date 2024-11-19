@@ -3043,20 +3043,164 @@ function wp_check_filetype( $filename, $mimes = null ) {
 	}
 	$type = false;
 	$ext  = false;
-	error_log(basename(__FILE__).'::_wp_handle_upload:: filename ::'.$filename);
+	//error_log(basename(__FILE__).'::wp_check_filetype:: filename ::'.$filename.' =========================================================================================================');
 
-	//error_log(basename(__FILE__).'::_wp_handle_upload:: mimes ::'.print_r($mimes,true));
+	//error_log(basename(__FILE__).'::wp_check_filetype:: mimes ::'.print_r($mimes,true));
+	//error_log(basename(__FILE__).'::wp_check_filetype:: empty(mimes) ::'.empty( $mimes ));
 
 
 	foreach ( $mimes as $ext_preg => $mime_match ) {
+		//if ($ext_preg == 'video/mp4')error_log(basename(__FILE__).'::wp_check_filetype:: ext_preg ::'.$ext_preg . ' :: mime_match :: '.$mime_match);
 		$ext_preg = '!\.(' . $ext_preg . ')$!i';
-		//error_log(basename(__FILE__).'::_wp_handle_upload:: ext_preg ::'.print_r($ext_preg,true));
-		if ($mime_match == 'video/mp4')error_log(basename(__FILE__).'::_wp_handle_upload:: ext_preg ::'.$ext_preg.' ::'.$filename.'::');
+		//error_log(basename(__FILE__).'::wp_check_filetype:: ext_preg ::'.print_r($ext_preg,true));
+		//if ($mime_match == 'video/mp4')error_log(basename(__FILE__).'::wp_check_filetype:: ext_preg ::'.$ext_preg.' ::'.$filename.'::');
+		//if ($mime_match == 'video/mp4')error_log(basename(__FILE__).'::wp_check_filetype:: ext_preg :: '.$ext_preg.' ::'.$filename.'::');
 		if ( preg_match( $ext_preg, $filename, $ext_matches ) ) {
 			$type = $mime_match;
 			$ext  = $ext_matches[1];
+			//error_log(basename(__FILE__).'::wp_check_filetype:: type ::'.$type . ' :: ext :: '.$ext);
 			break;
 		}
+	}
+	//error_log(basename(__FILE__).'::wp_check_filetype::type::'.$type.'::ext::'.$ext.':: -'.isset($type).'-'.empty($type).'-'.is_null($type).'-'.strlen($type).'*');
+	
+
+	if((strlen($type)==0&&strlen($ext)==0)){		
+		$info = pathinfo($filename);
+		$ext=$info['extension'];
+		//error_log(basename(__FILE__).'::wp_check_filetype::0::'.$ext.'::');
+		//error_log(basename(__FILE__).'::wp_check_filetype:: mimes ::'.print_r($mimes,true));
+		//$keys = preg_grep('/\bmp4\b/', array_keys($mimes));
+		//error_log(basename(__FILE__).'::wp_check_filetype:: keys ::'.print_r($keys,true));
+		//error_log(basename(__FILE__).'::wp_check_filetype:: mimes ::'.print_r($mimes,true));
+		///error_log(basename(__FILE__).'::wp_check_filetype::0::'.array_key_exists($info['extension'], $mimes));
+		/*if (array_key_exists($info['extension'], $mimes)) {
+			$type = $mime_match[$info['extension']];
+			$ext  = $info['extension'];
+			error_log(basename(__FILE__).'::wp_check_filetype::(2) type ::'.$type . ' :: ext :: '.$ext.' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+			//break;
+
+		}
+		foreach ($mimes as $key => $value) {
+			// Dividir las claves separadas por '|' y comprobar si 'mp4' está en alguna
+			if (in_array($info['extension'], explode('|', $key))) {
+				error_log(basename(__FILE__).'::wp_check_filetype::1::'.$value);
+				break;
+			}
+		}
+		
+
+		foreach ( $mimes as $ext_preg => $mime_match ) {
+			error_log(basename(__FILE__).'::wp_check_filetype::===0===::'.$ext_preg.'==0=='.$info['extension']);
+			if(str_contains($ext_preg,$info['extension'])){
+				$type = $mime_match;
+				$ext  = $info['extension'];
+				error_log(basename(__FILE__).'::wp_check_filetype::(2) type ::'.$type . ' :: ext :: '.$ext.' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+				break;
+	
+			}
+		}*/
+		
+		if(str_contains('jpg|jpeg|jpe',$ext)){ $type = 'image/jpeg';}
+		if(str_contains('gif',$ext)){ $type = 'image/gif';}
+		if(str_contains('png',$ext)){ $type = 'image/png';}
+		if(str_contains('bmp',$ext)){ $type = 'image/bmp';}
+		if(str_contains('tiff|tif',$ext)){ $type = 'image/tiff';}
+		if(str_contains('webp',$ext)){ $type = 'image/webp';}
+		if(str_contains('avif',$ext)){ $type = 'image/avif';}
+		if(str_contains('ico',$ext)){ $type = 'image/x-icon';}
+		if(str_contains('heic',$ext)){ $type = 'image/heic';}
+		if(str_contains('asf|asx',$ext)){ $type = 'video/x-ms-asf';}
+		if(str_contains('wmv',$ext)){ $type = 'video/x-ms-wmv';}
+		if(str_contains('wmx',$ext)){ $type = 'video/x-ms-wmx';}
+		if(str_contains('wm',$ext)){ $type = 'video/x-ms-wm';}
+		if(str_contains('avi',$ext)){ $type = 'video/avi';}
+		if(str_contains('divx',$ext)){ $type = 'video/divx';}
+		if(str_contains('flv',$ext)){ $type = 'video/x-flv';}
+		if(str_contains('mov|qt',$ext)){ $type = 'video/quicktime';}
+		if(str_contains('mpeg|mpg|mpe',$ext)){ $type = 'video/mpeg';}
+		if(str_contains('mp4|m4v',$ext)){ $type = 'video/mp4';}
+		if(str_contains('ogv',$ext)){ $type = 'video/ogg';}
+		if(str_contains('webm',$ext)){ $type = 'video/webm';}
+		if(str_contains('mkv',$ext)){ $type = 'video/x-matroska';}
+		if(str_contains('3gp|3gpp',$ext)){ $type = 'video/3gpp';}
+		if(str_contains('3g2|3gp2',$ext)){ $type = 'video/3gpp2';}
+		if(str_contains('txt|asc|c|cc|h|srt',$ext)){ $type = 'text/plain';}
+		if(str_contains('csv',$ext)){ $type = 'text/csv';}
+		if(str_contains('tsv',$ext)){ $type = 'text/tab-separated-values';}
+		if(str_contains('ics',$ext)){ $type = 'text/calendar';}
+		if(str_contains('rtx',$ext)){ $type = 'text/richtext';}
+		if(str_contains('css',$ext)){ $type = 'text/css';}
+		if(str_contains('htm|html',$ext)){ $type = 'text/html';}
+		if(str_contains('vtt',$ext)){ $type = 'text/vtt';}
+		if(str_contains('dfxp',$ext)){ $type = 'application/ttaf+xml';}
+		if(str_contains('mp3|m4a|m4b',$ext)){ $type = 'audio/mpeg';}
+		if(str_contains('aac',$ext)){ $type = 'audio/aac';}
+		if(str_contains('ra|ram',$ext)){ $type = 'audio/x-realaudio';}
+		if(str_contains('wav',$ext)){ $type = 'audio/wav';}
+		if(str_contains('ogg|oga',$ext)){ $type = 'audio/ogg';}
+		if(str_contains('flac',$ext)){ $type = 'audio/flac';}
+		if(str_contains('mid|midi',$ext)){ $type = 'audio/midi';}
+		if(str_contains('wma',$ext)){ $type = 'audio/x-ms-wma';}
+		if(str_contains('wax',$ext)){ $type = 'audio/x-ms-wax';}
+		if(str_contains('mka',$ext)){ $type = 'audio/x-matroska';}
+		if(str_contains('rtf',$ext)){ $type = 'application/rtf';}
+		if(str_contains('js',$ext)){ $type = 'application/javascript';}
+		if(str_contains('pdf',$ext)){ $type = 'application/pdf';}
+		if(str_contains('swf',$ext)){ $type = 'application/x-shockwave-flash';}
+		if(str_contains('class',$ext)){ $type = 'application/java';}
+		if(str_contains('tar',$ext)){ $type = 'application/x-tar';}
+		if(str_contains('zip',$ext)){ $type = 'application/zip';}
+		if(str_contains('gz|gzip',$ext)){ $type = 'application/x-gzip';}
+		if(str_contains('rar',$ext)){ $type = 'application/rar';}
+		if(str_contains('7z',$ext)){ $type = 'application/x-7z-compressed';}
+		if(str_contains('exe',$ext)){ $type = 'application/x-msdownload';}
+		if(str_contains('psd',$ext)){ $type = 'application/octet-stream';}
+		if(str_contains('xcf',$ext)){ $type = 'application/octet-stream';}
+		if(str_contains('doc',$ext)){ $type = 'application/msword';}
+		if(str_contains('pot|pps|ppt',$ext)){ $type = 'application/vnd.ms-powerpoint';}
+		if(str_contains('wri',$ext)){ $type = 'application/vnd.ms-write';}
+		if(str_contains('xla|xls|xlt|xlw',$ext)){ $type = 'application/vnd.ms-excel';}
+		if(str_contains('mdb',$ext)){ $type = 'application/vnd.ms-access';}
+		if(str_contains('mpp',$ext)){ $type = 'application/vnd.ms-project';}
+		if(str_contains('docx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';}
+		if(str_contains('docm',$ext)){ $type = 'application/vnd.ms-word.document.macroEnabled.12';}
+		if(str_contains('dotx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.template';}
+		if(str_contains('dotm',$ext)){ $type = 'application/vnd.ms-word.template.macroEnabled.12';}
+		if(str_contains('xlsx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';}
+		if(str_contains('xlsm',$ext)){ $type = 'application/vnd.ms-excel.sheet.macroEnabled.12';}
+		if(str_contains('xlsb',$ext)){ $type = 'application/vnd.ms-excel.sheet.binary.macroEnabled.12';}
+		if(str_contains('xltx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.template';}
+		if(str_contains('xltm',$ext)){ $type = 'application/vnd.ms-excel.template.macroEnabled.12';}
+		if(str_contains('xlam',$ext)){ $type = 'application/vnd.ms-excel.addin.macroEnabled.12';}
+		if(str_contains('pptx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';}
+		if(str_contains('pptm',$ext)){ $type = 'application/vnd.ms-powerpoint.presentation.macroEnabled.12';}
+		if(str_contains('ppsx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.presentationml.slideshow';}
+		if(str_contains('ppsm',$ext)){ $type = 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12';}
+		if(str_contains('potx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.presentationml.template';}
+		if(str_contains('potm',$ext)){ $type = 'application/vnd.ms-powerpoint.template.macroEnabled.12';}
+		if(str_contains('ppam',$ext)){ $type = 'application/vnd.ms-powerpoint.addin.macroEnabled.12';}
+		if(str_contains('sldx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.presentationml.slide';}
+		if(str_contains('sldm',$ext)){ $type = 'application/vnd.ms-powerpoint.slide.macroEnabled.12';}
+		if(str_contains('onetoc|onetoc2|onetmp|onepkg',$ext)){ $type = 'application/onenote';}
+		if(str_contains('oxps',$ext)){ $type = 'application/oxps';}
+		if(str_contains('xps',$ext)){ $type = 'application/vnd.ms-xpsdocument';}
+		if(str_contains('odt',$ext)){ $type = 'application/vnd.oasis.opendocument.text';}
+		if(str_contains('odp',$ext)){ $type = 'application/vnd.oasis.opendocument.presentation';}
+		if(str_contains('ods',$ext)){ $type = 'application/vnd.oasis.opendocument.spreadsheet';}
+		if(str_contains('odg',$ext)){ $type = 'application/vnd.oasis.opendocument.graphics';}
+		if(str_contains('odc',$ext)){ $type = 'application/vnd.oasis.opendocument.chart';}
+		if(str_contains('odb',$ext)){ $type = 'application/vnd.oasis.opendocument.database';}
+		if(str_contains('odf',$ext)){ $type = 'application/vnd.oasis.opendocument.formula';}
+		if(str_contains('wp|wpd',$ext)){ $type = 'application/wordperfect';}
+		if(str_contains('key',$ext)){ $type = 'application/vnd.apple.keynote';}
+		if(str_contains('numbers',$ext)){ $type = 'application/vnd.apple.numbers';}
+		if(str_contains('pages',$ext)){ $type = 'application/vnd.apple.pages';}
+		
+		if(strlen($type)==0){
+			$ext='';
+		}
+		//error_log(basename(__FILE__).'::wp_check_filetype::(2) type ::'.$type . ' :: ext :: '.$ext.' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
 	}
 
 	return compact( 'ext', 'type' );
@@ -3096,10 +3240,10 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 	$type        = $wp_filetype['type'];
 
 
-	error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: wp_filetype ::'.print_r($wp_filetype,true));
-	error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: ext ::'.$ext);
-	error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: type ::'.$type);
-	error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: mimes ::'.print_r($mimes,true));
+	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: wp_filetype ::'.print_r($wp_filetype,true));
+	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: ext ::'.$ext);
+	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: type ::'.$type);
+	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: mimes ::'.print_r($mimes,true));
 
 	// We can't do any further validation without a file to work with.
 	if ( ! file_exists( $file ) ) {
@@ -3270,6 +3414,10 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		}
 	}
 
+	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: before :: ext ::'.$ext);
+	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: before :: type ::'.$type);
+
+
 	// The mime type must be allowed.
 	if ( $type ) {
 		$allowed = get_allowed_mime_types();
@@ -3278,7 +3426,116 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 			$type = false;
 			$ext  = false;
 		}
+
+		if((strlen($type)==0&&strlen($ext)==0)){		
+			$info = pathinfo($filename);
+			$ext=$info['extension'];
+	
+
+			if(str_contains('jpg|jpeg|jpe',$ext)){ $type = 'image/jpeg';}
+			if(str_contains('gif',$ext)){ $type = 'image/gif';}
+			if(str_contains('png',$ext)){ $type = 'image/png';}
+			if(str_contains('bmp',$ext)){ $type = 'image/bmp';}
+			if(str_contains('tiff|tif',$ext)){ $type = 'image/tiff';}
+			if(str_contains('webp',$ext)){ $type = 'image/webp';}
+			if(str_contains('avif',$ext)){ $type = 'image/avif';}
+			if(str_contains('ico',$ext)){ $type = 'image/x-icon';}
+			if(str_contains('heic',$ext)){ $type = 'image/heic';}
+			if(str_contains('asf|asx',$ext)){ $type = 'video/x-ms-asf';}
+			if(str_contains('wmv',$ext)){ $type = 'video/x-ms-wmv';}
+			if(str_contains('wmx',$ext)){ $type = 'video/x-ms-wmx';}
+			if(str_contains('wm',$ext)){ $type = 'video/x-ms-wm';}
+			if(str_contains('avi',$ext)){ $type = 'video/avi';}
+			if(str_contains('divx',$ext)){ $type = 'video/divx';}
+			if(str_contains('flv',$ext)){ $type = 'video/x-flv';}
+			if(str_contains('mov|qt',$ext)){ $type = 'video/quicktime';}
+			if(str_contains('mpeg|mpg|mpe',$ext)){ $type = 'video/mpeg';}
+			if(str_contains('mp4|m4v',$ext)){ $type = 'video/mp4';}
+			if(str_contains('ogv',$ext)){ $type = 'video/ogg';}
+			if(str_contains('webm',$ext)){ $type = 'video/webm';}
+			if(str_contains('mkv',$ext)){ $type = 'video/x-matroska';}
+			if(str_contains('3gp|3gpp',$ext)){ $type = 'video/3gpp';}
+			if(str_contains('3g2|3gp2',$ext)){ $type = 'video/3gpp2';}
+			if(str_contains('txt|asc|c|cc|h|srt',$ext)){ $type = 'text/plain';}
+			if(str_contains('csv',$ext)){ $type = 'text/csv';}
+			if(str_contains('tsv',$ext)){ $type = 'text/tab-separated-values';}
+			if(str_contains('ics',$ext)){ $type = 'text/calendar';}
+			if(str_contains('rtx',$ext)){ $type = 'text/richtext';}
+			if(str_contains('css',$ext)){ $type = 'text/css';}
+			if(str_contains('htm|html',$ext)){ $type = 'text/html';}
+			if(str_contains('vtt',$ext)){ $type = 'text/vtt';}
+			if(str_contains('dfxp',$ext)){ $type = 'application/ttaf+xml';}
+			if(str_contains('mp3|m4a|m4b',$ext)){ $type = 'audio/mpeg';}
+			if(str_contains('aac',$ext)){ $type = 'audio/aac';}
+			if(str_contains('ra|ram',$ext)){ $type = 'audio/x-realaudio';}
+			if(str_contains('wav',$ext)){ $type = 'audio/wav';}
+			if(str_contains('ogg|oga',$ext)){ $type = 'audio/ogg';}
+			if(str_contains('flac',$ext)){ $type = 'audio/flac';}
+			if(str_contains('mid|midi',$ext)){ $type = 'audio/midi';}
+			if(str_contains('wma',$ext)){ $type = 'audio/x-ms-wma';}
+			if(str_contains('wax',$ext)){ $type = 'audio/x-ms-wax';}
+			if(str_contains('mka',$ext)){ $type = 'audio/x-matroska';}
+			if(str_contains('rtf',$ext)){ $type = 'application/rtf';}
+			if(str_contains('js',$ext)){ $type = 'application/javascript';}
+			if(str_contains('pdf',$ext)){ $type = 'application/pdf';}
+			if(str_contains('swf',$ext)){ $type = 'application/x-shockwave-flash';}
+			if(str_contains('class',$ext)){ $type = 'application/java';}
+			if(str_contains('tar',$ext)){ $type = 'application/x-tar';}
+			if(str_contains('zip',$ext)){ $type = 'application/zip';}
+			if(str_contains('gz|gzip',$ext)){ $type = 'application/x-gzip';}
+			if(str_contains('rar',$ext)){ $type = 'application/rar';}
+			if(str_contains('7z',$ext)){ $type = 'application/x-7z-compressed';}
+			if(str_contains('exe',$ext)){ $type = 'application/x-msdownload';}
+			if(str_contains('psd',$ext)){ $type = 'application/octet-stream';}
+			if(str_contains('xcf',$ext)){ $type = 'application/octet-stream';}
+			if(str_contains('doc',$ext)){ $type = 'application/msword';}
+			if(str_contains('pot|pps|ppt',$ext)){ $type = 'application/vnd.ms-powerpoint';}
+			if(str_contains('wri',$ext)){ $type = 'application/vnd.ms-write';}
+			if(str_contains('xla|xls|xlt|xlw',$ext)){ $type = 'application/vnd.ms-excel';}
+			if(str_contains('mdb',$ext)){ $type = 'application/vnd.ms-access';}
+			if(str_contains('mpp',$ext)){ $type = 'application/vnd.ms-project';}
+			if(str_contains('docx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';}
+			if(str_contains('docm',$ext)){ $type = 'application/vnd.ms-word.document.macroEnabled.12';}
+			if(str_contains('dotx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.template';}
+			if(str_contains('dotm',$ext)){ $type = 'application/vnd.ms-word.template.macroEnabled.12';}
+			if(str_contains('xlsx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';}
+			if(str_contains('xlsm',$ext)){ $type = 'application/vnd.ms-excel.sheet.macroEnabled.12';}
+			if(str_contains('xlsb',$ext)){ $type = 'application/vnd.ms-excel.sheet.binary.macroEnabled.12';}
+			if(str_contains('xltx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.template';}
+			if(str_contains('xltm',$ext)){ $type = 'application/vnd.ms-excel.template.macroEnabled.12';}
+			if(str_contains('xlam',$ext)){ $type = 'application/vnd.ms-excel.addin.macroEnabled.12';}
+			if(str_contains('pptx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';}
+			if(str_contains('pptm',$ext)){ $type = 'application/vnd.ms-powerpoint.presentation.macroEnabled.12';}
+			if(str_contains('ppsx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.presentationml.slideshow';}
+			if(str_contains('ppsm',$ext)){ $type = 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12';}
+			if(str_contains('potx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.presentationml.template';}
+			if(str_contains('potm',$ext)){ $type = 'application/vnd.ms-powerpoint.template.macroEnabled.12';}
+			if(str_contains('ppam',$ext)){ $type = 'application/vnd.ms-powerpoint.addin.macroEnabled.12';}
+			if(str_contains('sldx',$ext)){ $type = 'application/vnd.openxmlformats-officedocument.presentationml.slide';}
+			if(str_contains('sldm',$ext)){ $type = 'application/vnd.ms-powerpoint.slide.macroEnabled.12';}
+			if(str_contains('onetoc|onetoc2|onetmp|onepkg',$ext)){ $type = 'application/onenote';}
+			if(str_contains('oxps',$ext)){ $type = 'application/oxps';}
+			if(str_contains('xps',$ext)){ $type = 'application/vnd.ms-xpsdocument';}
+			if(str_contains('odt',$ext)){ $type = 'application/vnd.oasis.opendocument.text';}
+			if(str_contains('odp',$ext)){ $type = 'application/vnd.oasis.opendocument.presentation';}
+			if(str_contains('ods',$ext)){ $type = 'application/vnd.oasis.opendocument.spreadsheet';}
+			if(str_contains('odg',$ext)){ $type = 'application/vnd.oasis.opendocument.graphics';}
+			if(str_contains('odc',$ext)){ $type = 'application/vnd.oasis.opendocument.chart';}
+			if(str_contains('odb',$ext)){ $type = 'application/vnd.oasis.opendocument.database';}
+			if(str_contains('odf',$ext)){ $type = 'application/vnd.oasis.opendocument.formula';}
+			if(str_contains('wp|wpd',$ext)){ $type = 'application/wordperfect';}
+			if(str_contains('key',$ext)){ $type = 'application/vnd.apple.keynote';}
+			if(str_contains('numbers',$ext)){ $type = 'application/vnd.apple.numbers';}
+			if(str_contains('pages',$ext)){ $type = 'application/vnd.apple.pages';}
+			
+			if(strlen($type)==0){
+				$ext=false;
+			}
+		}
 	}
+
+	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: after :: ext ::'.$ext);
+	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: after :: type ::'.$type);
 
 	/**
 	 * Filters the "real" file type of the given file.

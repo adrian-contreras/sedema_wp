@@ -2763,7 +2763,7 @@ msgstr "Las actualizaciones automáticas de plugins y temas parecen estar config
 #: wp-admin/includes/class-wp-themes-list-table.php:214
 msgctxt "theme"
 msgid "Activate &#8220;%s&#8221;"
-msgstr "Activar \"%s\""
+msgstr "Activar &#8220;%s&#8221;"
 
 #: wp-admin/includes/ajax-actions.php:5563
 msgid "Sorry, you are not allowed to modify plugins."

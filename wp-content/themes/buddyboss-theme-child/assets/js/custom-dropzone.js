@@ -1,3 +1,6 @@
+var myDropzone;
+var dz;
+
 Dropzone.autoDiscover = false;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -7,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var previewTemplate = previewNode.parentNode.innerHTML;
     previewNode.parentNode.removeChild(previewNode);*/
 
-    var myDropzone = new Dropzone("#dropzone-139-10", {
+    myDropzone = new Dropzone("#dropzone-139-10", {
         url: "#",
         autoProcessQueue: false,
         maxFilesize: 10, // 10 MB
@@ -19,55 +22,175 @@ document.addEventListener('DOMContentLoaded', function() {
         thumbnailWidth: 120,
         thumbnailHeight: 120,
         init: function() {
-            var dz = this;
-            var form = document.getElementById('wpforms-form-139');
+            dz = this;
+            var form = document.getElementById('wpforms-form-139');            
             var fileInput = document.getElementById('wpforms-139-field_10');
-            
-            form.addEventListener('submit', function(e) {
-                if (dz.getQueuedFiles().length > 0) {
+
+
+            //Los cambios principales que he realizado son:
+            //updateFileInput en una función asíncrona que devuelve una promesa
+            //procesamiento en paralelo de los archivos usando Promise.all
+            //Mejoré el manejo de errores y la verificación de archivos nulos
+            //Modifiqué el evento submit para esperar a que se complete el procesamiento de archivos
+            //Agregué verificaciones adicionales y logging para depuración
+
+            // Función para convertir URL a File
+            async function urlToFile(url, filename, mimeType) {
+                try {
+                    const response = await fetch(url);
+                    const blob = await response.blob();
+                    return new File([blob], filename, { type: mimeType });
+                } catch (error) {
+                    console.error('Error converting URL to File:', error);
+                    return null;
+                }
+            }
+
+            // Función para crear un archivo temporal desde una URL
+            async function createTempFileFromUrl(fileData) {
+                const tempFile = await urlToFile(fileData.url, fileData.name, fileData.type);
+                if (tempFile) {
+                    tempFile.serverID = fileData.id;
+                    tempFile.url = fileData.url;
+                    tempFile.thumbnail = fileData.thumbnail;
+                    return tempFile;
+                }
+                return null;
+            }
+
+            // Función asíncrona para actualizar el input de archivos
+            async function updateFileInput(files) {
+                const dataTransfer = new DataTransfer();
+                
+                // Procesar todos los archivos de manera asíncrona
+                const processedFiles = await Promise.all(files.map(async (file) => {
+                    if (file.url) {
+                        return await createTempFileFromUrl(file);
+                    } else if (file instanceof File) {
+                        return file;
+                    }
+                    return null;
+                }));
+
+                // Filtrar archivos nulos y agregarlos al DataTransfer
+                processedFiles
+                    .filter(file => file !== null)
+                    .forEach(file => dataTransfer.items.add(file));
+
+                fileInput.files = dataTransfer.files;
+                return dataTransfer.files;
+            }
+
+            form.addEventListener('submit', async function(e) {
+
+                
+                try {
                     e.preventDefault();
                     e.stopPropagation();
-                    dz.processQueue();
-                }
+
+                    // Esperar a que se procesen todos los archivos
+                    await updateFileInput(dz.files);
+
+                    // Verificar si hay archivos para enviar
+                    if (fileInput.files.length > 0) {
+                        //console.log('Archivos a enviar:', fileInput.files);
+                        
+                        // Crear input para archivos existentes
+                        /*const existingFiles = dz.files
+                            .filter(file => file.serverID)
+                            .map(file => ({
+                                id: file.serverID,
+                                name: file.name,
+                                url: file.url,
+                                thumbnail: file.thumbnail
+                            }));
+
+                        if (existingFiles.length > 0) {
+                            const container = document.getElementById('wpforms-139-field_10-container');
+                            let existingFilesInput = document.getElementById('wpforms-139-field_10_existing');
+                            
+                            if (!existingFilesInput) {
+                                existingFilesInput = document.createElement('input');
+                                existingFilesInput.type = 'hidden';
+                                existingFilesInput.name = 'wpforms[fields][10_existing]';
+                                existingFilesInput.id = 'wpforms-139-field_10_existing';
+                                container.appendChild(existingFilesInput);
+                            }
+                            
+                            existingFilesInput.value = JSON.stringify(existingFiles);
+                        }
+                        */
+                        // Proceder con el envío del formulario
+                        //form.submit();
+                    } else {
+                        console.warn('No hay archivos para enviar');
+                        // Decidir si continuar con el envío del formulario sin archivos
+                        //form.submit();
+                    }
+                } catch (error) {
+                    console.error('Error al procesar los archivos:', error);
+                }                
+               
+
             });
 
-            this.on("addedfile", function(file) {
-                updateFileInput(dz.files);
-                // Previsualización personalizada para videos
-                //console.log('file.type',file.type);
+            this.on("addedfile", async function(file) {
+                //console.log("addedfile");
+                
                 if (file.type.startsWith('video/')) {
                     file.previewElement.querySelector(".dz-image img").remove();
 
-                    // Crear el elemento de video
                     var video = document.createElement('video');
                     video.style.width = '120px';
                     video.style.height = '120px';
                     video.setAttribute('controls', 'controls');
 
-                    var source = document.createElement('source');
-                    source.src = URL.createObjectURL(file);
-                    source.type = file.type;
-                    
-                    // Añadir la fuente al video y el video a la previsualización
-                    video.appendChild(source);
-                    file.previewElement.querySelector(".dz-image").appendChild(video);
+                    if (file.url) {
+                        var source = document.createElement('source');
+                        source.src = file.url;
+                        source.type = file.type;
+                        video.appendChild(source);
+                        file.previewElement.querySelector(".dz-image").appendChild(video);
+                        
+                        // Si ya tiene thumbnail guardado, usarlo
+                        if (file.thumbnail) {
+                            var img = new Image();
+                            img.src = file.thumbnail;
+                            file.previewElement.querySelector(".dz-image").appendChild(img);
+                        }
+                            
+                    } 
+                    // Si es un archivo nuevo
+                    else if (file instanceof File) {
+                        var source = document.createElement('source');
+                        source.src = URL.createObjectURL(file);
+                        source.type = file.type;
+                        video.appendChild(source);
+                        file.previewElement.querySelector(".dz-image").appendChild(video);
 
-                    generateVideoThumbnail(file, function(thumbnail) {
-                        file.thumbnail = thumbnail;
-                        updateThumbnailsField();
-                    });                    
+                        generateVideoThumbnail(file, function(thumbnail) {
+                            file.thumbnail = thumbnail;
+                            updateThumbnailsField();
+                        });
+                    }                    
                 }
+
+                await updateFileInput(dz.files);
 
             });
 
-            this.on("removedfile", function(file) {
-                updateFileInput(dz.files);
+            this.on("removedfile", async function(file) {
+                //console.log('removedfile');                
+                
                 if (file.type.startsWith('video/')){
                     updateThumbnailsField();
                 }
+                await updateFileInput(dz.files);
             });
 
             this.on("sendingmultiple", function(files, xhr, formData) {
+                //console.log('sendingmultiple');
+                formData.append('nonce', ajax_params.nonce); 
                 // Añade los campos del formulario a formData
                 Array.from(form.elements).forEach(function(field) {
                     formData.append(field.name, field.value);
@@ -75,6 +198,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             this.on("successmultiple", function(files, response) {
+                console.log('successmultiple');
                 form.submit();
             });
 
@@ -82,15 +206,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error("Error al subir archivos:", response);
             });
 
-            function updateFileInput(files) {
-                var dataTransfer = new DataTransfer();
-                files.forEach(function(file) {
-                    dataTransfer.items.add(file);
-                });
-                fileInput.files = dataTransfer.files;
+            // Función para convertir URL a File
+            /*async function urlToFile(url, filename, mimeType) {
+                try {
+                    const response = await fetch(url);
+                    const blob = await response.blob();
+                    return new File([blob], filename, { type: mimeType });
+                } catch (error) {
+                    console.error('Error converting URL to File:', error);
+                    return null;
+                }
             }
-            
+
+            // Función para crear un archivo temporal desde una URL
+            async function createTempFileFromUrl(fileData) {
+                const tempFile = await urlToFile(fileData.url, fileData.name, fileData.type);
+                if (tempFile) {
+                    tempFile.serverID = fileData.id;
+                    tempFile.url = fileData.url;
+                    tempFile.thumbnail = fileData.thumbnail;
+                    return tempFile;
+                }
+                return null;
+            }*/
+
             function generateVideoThumbnail(file, callback) {
+                console.log("generateVideoThumbnail");
+
+                if (!(file instanceof File)) return;                
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     var video = document.createElement('video');
@@ -163,4 +306,60 @@ window.addEventListener('load', function() {
             previousElement.style.display = 'none';
         }
     }
+});
+
+jQuery(document).ready(function($) {
+    // Función para obtener el nonce de WordPress
+    function getWPNonce() {
+        return typeof wpApiSettings !== 'undefined' ? wpApiSettings.nonce : '';
+    }    
+
+    function loadExistingFiles() {
+        let data_record_=$('.record').find('input').val();
+        //console.log(getWPNonce());
+        if(data_record_.length>0){
+            $.ajax({
+                url: ajax_params.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'get_existing_files', 
+                    record: data_record_,
+                    //nonce: getWPNonce()
+                },        
+                success: function(response) {
+                    //console.log(response);
+                    if (response.success) {
+                        response.data.forEach(function(fileData) {
+                            let mockFile = {
+                                name: fileData.name,
+                                size: fileData.size,
+                                accepted: true,
+                                status: Dropzone.ADDED,
+                                serverID: fileData.id,
+                                type: fileData.type,
+                                url: fileData.url,           // Añadir la URL del archivo
+                                thumbnail: fileData.thumbnail // Añadir el thumbnail si existe                                
+                              };
+                            //console.log("ajax::success::mockFile::",mockFile);
+                            dz.files.push(mockFile);                              
+                            dz.emit("addedfile", mockFile);
+                            // Si es una imagen, crear la miniatura
+                            if (fileData.type && fileData.type.startsWith('image/')) {
+                                // Usar la URL directamente sin createObjectURL
+                                dz.emit("thumbnail", mockFile, fileData.url);
+                            }
+                            dz.emit("complete", mockFile);
+                            
+                        });
+                    }
+                    
+          
+                    
+                },
+                error: function() {
+                }
+            });    
+        }
+    }
+    loadExistingFiles();
 });

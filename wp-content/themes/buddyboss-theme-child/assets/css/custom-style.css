@@ -95,3 +95,72 @@
 .footer-logo{
     color: var(--bb-footer-text-color) !important;
 }
+
+.record{
+    display: none !important;
+}
+
+.b-updater{
+    border-radius: 100px;
+    background-color: #9F2241;
+    color: #fff;
+    border: 1px solid #9F2241;
+    font-size: 15px;
+    padding: 10px 20px;
+}
+
+.toast {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.toast-danger {
+    background-color: #dc3545;
+}
+
+/* Estilos para los botones de DataTables */
+.dt-buttons {
+    margin-bottom: 15px;
+}
+
+.dt-button {
+    padding: 5px 10px;
+    margin-right: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f9fa;
+    cursor: pointer;
+}
+
+.dt-button:hover {
+    background: #e9ecef;
+}
+
+/* Estilos para el contenido expandible */
+.content-wrapper {
+    position: relative;
+}
+
+.toggle-content {
+    color: #0066cc !important;
+    padding: 2px 6px;
+    font-size: 12px;
+}
+
+.toggle-content:hover {
+    color: #004499 !important;
+}
+
+/* Ajustes para la tabla */
+#activitiesTable {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+#activitiesTable th, 
+#activitiesTable td {
+    padding: 8px;
+}

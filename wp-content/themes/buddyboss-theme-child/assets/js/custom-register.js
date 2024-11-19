@@ -53,12 +53,12 @@ jQuery(document).ready(function($) {
     function checkAliasUniqueness(alias) {
         //console.log('custom-register::checkAliasUniqueness::')
         $.ajax({
-            url: registerAjax.ajax_url,
+            url: ajax_params.ajax_url,
             type: 'POST',
             data: {
                 action: 'check_alias_uniqueness',
                 alias: alias,
-                nonce: registerAjax.nonce
+                nonce: ajax_params.nonce
             },
             success: function(response) {
                 //console.log('custom-register::checkAliasUniqueness::response::',response)
