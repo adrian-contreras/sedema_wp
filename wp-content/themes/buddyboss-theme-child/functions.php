@@ -1540,13 +1540,13 @@ function get_existing_files() {
         global $wpdb;
         $user_id = get_current_user_id();
         $id = intval( $_POST['record'] );
-
+        
         $activities = $wpdb->get_col(
             $wpdb->prepare( "SELECT multimedia FROM {$wpdb->prefix}ec_activities WHERE id = %d", $id )
         );
-        //error_log(basename(__FILE__).'::get_existing_files:: activities :: '. print_r($activities,true));
+        
         if ( $activities ) {
-
+            $files = array();
             $data=json_decode($activities[0],true);
             $attachments = [];
             foreach($data as $item){
@@ -1559,40 +1559,68 @@ function get_existing_files() {
             $dts_=implode(',', $attachments );
 
             $qry = "";
-            $qry.= " SELECT p.ID, p.post_title, p.post_mime_type as type, p.guid, pm.meta_value as file_size ";
-            $qry.= " FROM ".$wpdb->posts." p";
-            $qry.= " JOIN ".$wpdb->postmeta." pm ON p.ID = pm.post_id";
-            $qry.= " JOIN ".$wpdb->prefix."bp_media bpm ON p.ID = bpm.attachment_id";
-            $qry.= " WHERE bpm.user_id = ".$user_id." AND pm.meta_key = '_wp_attachment_metadata'";
-            $qry.= " AND bpm.attachment_id IN (";
-            $qry.= " SELECT min(post_id) FROM ".$wpdb->postmeta." pmt ";
-            $qry.= " WHERE pmt.post_id IN (".$dts_.")";
-            $qry.= " AND pmt.meta_key = '_wp_attachment_metadata' ";
-            $qry.= " group by pmt.meta_value";
-            $qry.= ") ";
-                        
+            $qry.= " SELECT files.id";
+            $qry.= " FROM (";
+            $qry.= " SELECT MIN(post_id) AS id,";
+            $qry.= " CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(ps.meta_value, 's:8:\"filesize\";i:', -1), ';', 1), '\"', 1) AS UNSIGNED) AS filesize";
+            $qry.= " FROM ".$wpdb->postmeta." ps";
+            $qry.= " WHERE ps.meta_key = '_wp_attachment_metadata'";
+            $qry.= " AND ps.post_id IN (".$dts_.")";
+            $qry.= " GROUP BY filesize";
+            $qry.= " ) files";
 
-            $query = $wpdb->prepare($qry);
+            $results = $wpdb->get_results($wpdb->prepare($qry));            
+                    
+            if(count($results)>0){
+                $files_ids = [];
+                foreach ($results as $result) {
+                    $files_ids[]=$result->id;
+                }
 
-            $results = $wpdb->get_results($query);
-            $files = array();
+                $qry = "";
 
-            foreach ($results as $result) {
-                $meta = unserialize($result->file_size);
-                $filesize = isset($meta['filesize']) ? $meta['filesize'] : 0;
-                $url=wp_get_attachment_url($result->ID);
-                $files[] = array(
-                    'id' => $result->ID,
-                    'name' => getFullName($result->post_title,$url),
-                    'size' => $filesize,
-                    'type' => $result->type,
-                    //'url' => $result->guid,
-                    'url' => $url, // Usar función segura de WordPress
-                    'thumbnail' => get_post_meta($result->ID, '_video_thumbnail', true) // Si guardas thumbnails
-                );
+                $qry.= " SELECT p.ID, p.post_title, p.post_mime_type as type, p.guid, pm.meta_value as file_size ";
+                $qry.= " FROM ".$wpdb->posts." p";
+                $qry.= " JOIN ".$wpdb->postmeta." pm ON p.ID = pm.post_id";
+                $qry.= " JOIN ".$wpdb->prefix."bp_media bpm ON p.ID = bpm.attachment_id";
+                $qry.= " WHERE bpm.user_id = ".$user_id." AND pm.meta_key = '_wp_attachment_metadata'";
+                $qry.= " AND bpm.attachment_id IN (";
+                //$qry.= " SELECT MIN(post_id) FROM ".$wpdb->postmeta." pmt ";
+                //$qry.= " WHERE pmt.post_id IN (".$dts_.")";
+                //$qry.= " AND pmt.meta_key = '_wp_attachment_metadata' ";
+                //$qry.= " group by pmt.meta_value";
+                $qry.= implode(',', $files_ids );
+                $qry.= " ) ";
+                //$qry.= " AND p.post_mime_type LIKE '%video%'";
+    
+                            
+                error_log(basename(__FILE__).'::get_existing_files:: qry :: '. $qry);
+                $query = $wpdb->prepare($qry);
+                $results = $wpdb->get_results($query);
+      
+                
+    
+                error_log(basename(__FILE__).'::get_existing_files:: results :: '. print_r($results,true));
+    
+    
+                foreach ($results as $result) {
+                    $meta = unserialize($result->file_size);
+                    $filesize = isset($meta['filesize']) ? $meta['filesize'] : 0;
+                    $url=wp_get_attachment_url($result->ID);
+                    $files[] = array(
+                        'id' => $result->ID,
+                        'name' => getFullName($result->post_title,$url),
+                        'size' => $filesize,
+                        'type' => $result->type,
+                        //'url' => $result->guid,
+                        'url' => $url, // Usar función segura de WordPress
+                        'thumbnail' => get_post_meta($result->ID, '_video_thumbnail', true) // Si guardas thumbnails
+                    );
+                }
+    
+                wp_send_json_success($files);                
             }
 
-            wp_send_json_success($files);
         } else {
             wp_send_json_error( 'No se encontraron actividades.' );
         }

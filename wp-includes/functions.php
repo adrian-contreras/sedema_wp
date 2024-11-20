@@ -3043,63 +3043,20 @@ function wp_check_filetype( $filename, $mimes = null ) {
 	}
 	$type = false;
 	$ext  = false;
-	//error_log(basename(__FILE__).'::wp_check_filetype:: filename ::'.$filename.' =========================================================================================================');
-
-	//error_log(basename(__FILE__).'::wp_check_filetype:: mimes ::'.print_r($mimes,true));
-	//error_log(basename(__FILE__).'::wp_check_filetype:: empty(mimes) ::'.empty( $mimes ));
-
 
 	foreach ( $mimes as $ext_preg => $mime_match ) {
-		//if ($ext_preg == 'video/mp4')error_log(basename(__FILE__).'::wp_check_filetype:: ext_preg ::'.$ext_preg . ' :: mime_match :: '.$mime_match);
 		$ext_preg = '!\.(' . $ext_preg . ')$!i';
-		//error_log(basename(__FILE__).'::wp_check_filetype:: ext_preg ::'.print_r($ext_preg,true));
-		//if ($mime_match == 'video/mp4')error_log(basename(__FILE__).'::wp_check_filetype:: ext_preg ::'.$ext_preg.' ::'.$filename.'::');
-		//if ($mime_match == 'video/mp4')error_log(basename(__FILE__).'::wp_check_filetype:: ext_preg :: '.$ext_preg.' ::'.$filename.'::');
 		if ( preg_match( $ext_preg, $filename, $ext_matches ) ) {
 			$type = $mime_match;
 			$ext  = $ext_matches[1];
-			//error_log(basename(__FILE__).'::wp_check_filetype:: type ::'.$type . ' :: ext :: '.$ext);
 			break;
 		}
 	}
-	//error_log(basename(__FILE__).'::wp_check_filetype::type::'.$type.'::ext::'.$ext.':: -'.isset($type).'-'.empty($type).'-'.is_null($type).'-'.strlen($type).'*');
 	
 
 	if((strlen($type)==0&&strlen($ext)==0)){		
 		$info = pathinfo($filename);
 		$ext=$info['extension'];
-		//error_log(basename(__FILE__).'::wp_check_filetype::0::'.$ext.'::');
-		//error_log(basename(__FILE__).'::wp_check_filetype:: mimes ::'.print_r($mimes,true));
-		//$keys = preg_grep('/\bmp4\b/', array_keys($mimes));
-		//error_log(basename(__FILE__).'::wp_check_filetype:: keys ::'.print_r($keys,true));
-		//error_log(basename(__FILE__).'::wp_check_filetype:: mimes ::'.print_r($mimes,true));
-		///error_log(basename(__FILE__).'::wp_check_filetype::0::'.array_key_exists($info['extension'], $mimes));
-		/*if (array_key_exists($info['extension'], $mimes)) {
-			$type = $mime_match[$info['extension']];
-			$ext  = $info['extension'];
-			error_log(basename(__FILE__).'::wp_check_filetype::(2) type ::'.$type . ' :: ext :: '.$ext.' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-			//break;
-
-		}
-		foreach ($mimes as $key => $value) {
-			// Dividir las claves separadas por '|' y comprobar si 'mp4' está en alguna
-			if (in_array($info['extension'], explode('|', $key))) {
-				error_log(basename(__FILE__).'::wp_check_filetype::1::'.$value);
-				break;
-			}
-		}
-		
-
-		foreach ( $mimes as $ext_preg => $mime_match ) {
-			error_log(basename(__FILE__).'::wp_check_filetype::===0===::'.$ext_preg.'==0=='.$info['extension']);
-			if(str_contains($ext_preg,$info['extension'])){
-				$type = $mime_match;
-				$ext  = $info['extension'];
-				error_log(basename(__FILE__).'::wp_check_filetype::(2) type ::'.$type . ' :: ext :: '.$ext.' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-				break;
-	
-			}
-		}*/
 		
 		if(str_contains('jpg|jpeg|jpe',$ext)){ $type = 'image/jpeg';}
 		if(str_contains('gif',$ext)){ $type = 'image/gif';}
@@ -3200,7 +3157,7 @@ function wp_check_filetype( $filename, $mimes = null ) {
 		if(strlen($type)==0){
 			$ext='';
 		}
-		//error_log(basename(__FILE__).'::wp_check_filetype::(2) type ::'.$type . ' :: ext :: '.$ext.' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+
 	}
 
 	return compact( 'ext', 'type' );
@@ -3238,12 +3195,6 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 	$wp_filetype = wp_check_filetype( $filename, $mimes );
 	$ext         = $wp_filetype['ext'];
 	$type        = $wp_filetype['type'];
-
-
-	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: wp_filetype ::'.print_r($wp_filetype,true));
-	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: ext ::'.$ext);
-	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: type ::'.$type);
-	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: mimes ::'.print_r($mimes,true));
 
 	// We can't do any further validation without a file to work with.
 	if ( ! file_exists( $file ) ) {
@@ -3414,10 +3365,6 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		}
 	}
 
-	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: before :: ext ::'.$ext);
-	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: before :: type ::'.$type);
-
-
 	// The mime type must be allowed.
 	if ( $type ) {
 		$allowed = get_allowed_mime_types();
@@ -3533,9 +3480,6 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 			}
 		}
 	}
-
-	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: after :: ext ::'.$ext);
-	//error_log(basename(__FILE__).'::wp_check_filetype_and_ext:: after :: type ::'.$type);
 
 	/**
 	 * Filters the "real" file type of the given file.
